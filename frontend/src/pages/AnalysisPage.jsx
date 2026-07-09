@@ -114,7 +114,7 @@ const PipelineVisualization = ({ onComplete }) => {
   const progressPercent = Math.min(100, (currentStageIdx / PIPELINE_STAGES.length) * 100);
 
   return (
-    <div className="max-w-6xl mx-auto flex flex-col h-[700px] rounded-xl border overflow-hidden animate-in zoom-in-95 duration-700 bg-[#0A0A0A] shadow-2xl" style={{ borderColor: THEME.borderHighlight }}>
+    <div className="max-w-6xl mx-auto flex flex-col h-[85vh] min-h-[700px] rounded-xl border overflow-hidden animate-in zoom-in-95 duration-700 bg-[#0A0A0A] shadow-2xl" style={{ borderColor: THEME.borderHighlight }}>
       
       {/* Top Header */}
       <div className="flex-none bg-[#111] border-b px-4 py-3 flex justify-between items-center relative" style={{ borderColor: THEME.border }}>
@@ -136,11 +136,11 @@ const PipelineVisualization = ({ onComplete }) => {
 
       <div className="flex flex-1 overflow-hidden">
         {/* Left: Stage Pipeline Steps */}
-        <div className="w-72 border-r bg-[#050505] p-6 flex flex-col justify-center relative overflow-hidden" style={{ borderColor: THEME.border }}>
+        <div className="w-64 shrink-0 border-r bg-[#050505] p-5 flex flex-col justify-center relative overflow-hidden" style={{ borderColor: THEME.border }}>
           {/* Faint background grid */}
           <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '20px 20px' }} />
           
-          <div className="space-y-8 relative z-10">
+          <div className="space-y-6 relative z-10">
             <div className="absolute left-[9px] top-4 bottom-4 w-[1px] bg-white/10 -z-10" />
             
             {PIPELINE_STAGES.map((s, i) => {
@@ -167,23 +167,37 @@ const PipelineVisualization = ({ onComplete }) => {
         <div className="flex-1 flex flex-col bg-black relative">
           
           {/* Main SVG Visualizer */}
-          <div className="flex-1 relative overflow-hidden flex items-center justify-center p-8">
-            {/* Contextual Image Background */}
-            <div 
-              className="absolute inset-0 opacity-10 transition-all duration-1000 grayscale object-cover mix-blend-screen"
-              style={{ 
-                backgroundImage: `url(${MOCK_BEFORE})`, 
-                backgroundSize: 'cover', backgroundPosition: 'center',
-                filter: (currentStageIdx === 1 || currentStageIdx === 2) ? 'contrast(200%) brightness(150%) blur(4px)' : 'none',
-                opacity: currentStageIdx < 5 ? 0.15 : 0.05
-              }}
-            />
+          <div className="flex-1 relative overflow-hidden flex items-center justify-center p-3">
+            {/* Dual Image Background — Before (left) + After (right) */}
+            <div className="absolute inset-0 flex transition-opacity duration-1000" style={{ opacity: currentStageIdx < 6 ? 0.12 : 0.04 }}>
+              <div 
+                className="w-1/2 h-full grayscale mix-blend-screen transition-all duration-1000"
+                style={{ 
+                  backgroundImage: `url(${MOCK_BEFORE})`, 
+                  backgroundSize: 'cover', backgroundPosition: 'center',
+                  filter: (currentStageIdx === 1 || currentStageIdx === 2) ? 'contrast(200%) brightness(150%) blur(4px)' : 'blur(2px)',
+                }}
+              />
+              <div 
+                className="w-1/2 h-full grayscale mix-blend-screen transition-all duration-1000"
+                style={{ 
+                  backgroundImage: `url(${MOCK_AFTER})`, 
+                  backgroundSize: 'cover', backgroundPosition: 'center',
+                  filter: (currentStageIdx === 4 || currentStageIdx === 5) ? 'contrast(200%) brightness(150%) blur(4px)' : 'blur(2px)',
+                }}
+              />
+              {/* Gradient blend between the two */}
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/60 to-transparent" style={{ left: '30%', right: '30%' }} />
+            </div>
+            {/* T0/T1 labels */}
+            <div className="absolute top-3 left-4 text-[9px] font-mono text-white/15 tracking-widest">T0</div>
+            <div className="absolute top-3 right-4 text-[9px] font-mono text-white/15 tracking-widest">T1</div>
             
             <NetworkVisualizer stageId={stage.id} tick={pulseTick} />
           </div>
 
           {/* Live Terminal Output */}
-          <div className="h-40 bg-[#0A0A0A] border-t p-4 font-mono text-[10px] sm:text-xs overflow-y-auto" style={{ borderColor: THEME.borderHighlight }}>
+          <div className="h-32 shrink-0 bg-[#0A0A0A] border-t p-3 font-mono text-[10px] sm:text-xs overflow-y-auto" style={{ borderColor: THEME.borderHighlight }}>
             <div className="flex items-center gap-2 text-white/30 mb-2 sticky top-0 bg-[#0A0A0A]">
               <Terminal size={14} /> stdout
             </div>
