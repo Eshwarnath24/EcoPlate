@@ -1,122 +1,46 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import React, { useState, useEffect } from 'react';
+import { THEME } from './theme';
+import { useMousePosition } from './hooks';
+import GlobalStyles from './components/GlobalStyles';
+import NavBar from './components/NavBar';
+import LandingPage from './pages/LandingPage';
+import AnalysisPage from './pages/AnalysisPage';
+import ReportPage from './pages/ReportPage';
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const [appState, setAppState] = useState('landing');
+  const [images, setImages] = useState({ before: null, after: null });
+  const mousePos = useMousePosition();
+
+  useEffect(() => { window.scrollTo({ top: 0, behavior: 'smooth' }); }, [appState]);
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div style={{ backgroundColor: THEME.bg, color: THEME.text }} className="min-h-screen font-sans overflow-x-hidden selection:bg-white selection:text-black">
+      <GlobalStyles />
+      
+      {/* Global Cursor Spotlight */}
+      <div 
+        className="pointer-events-none fixed inset-0 z-50 transition-opacity duration-300"
+        style={{ 
+          background: `radial-gradient(800px circle at ${mousePos.x}px ${mousePos.y}px, rgba(255,255,255,0.03), transparent 40%)`,
+          opacity: mousePos.x ? 1 : 0 
+        }} 
+      />
 
-      <div className="ticks"></div>
+      {/* Grid Background */}
+      <div className="fixed inset-0 pointer-events-none opacity-20" style={{ backgroundImage: `linear-gradient(${THEME.border} 1px, transparent 1px), linear-gradient(90deg, ${THEME.border} 1px, transparent 1px)`, backgroundSize: '40px 40px' }} />
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      <NavBar onHome={() => setAppState('landing')} />
+      
+      <main className="max-w-6xl mx-auto px-6 py-12 relative z-10">
+        {appState === 'landing' && <LandingPage onStart={() => setAppState('upload')} />}
+        {(appState === 'upload' || appState === 'analyzing') && (
+          <AnalysisPage images={images} setImages={setImages} appState={appState} setAppState={setAppState} />
+        )}
+        {appState === 'results' && (
+          <ReportPage onReset={() => { setImages({ before: null, after: null }); setAppState('upload'); }} />
+        )}
+      </main>
+    </div>
+  );
 }
-
-export default App
