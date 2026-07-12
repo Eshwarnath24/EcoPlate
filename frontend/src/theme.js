@@ -1,21 +1,23 @@
-// --- Premium Dark Theme Constants ---
+// --- Warm Earthy Theme Constants (EcoPlate organic vibe) ---
 export const THEME = {
-  bg: '#000000',
-  surface: '#0A0A0A',
-  surfaceElevated: '#111111',
-  text: '#F5F5F7',
-  textMuted: '#888888',
-  primary: '#0070F3',
-  accent: '#7928CA',
-  success: '#10B981',
-  waste: '#EF4444',
-  border: 'rgba(255, 255, 255, 0.1)',
-  borderHighlight: 'rgba(255, 255, 255, 0.2)',
+  bg: '#F6F3EC',           // Bone / Cream
+  surface: '#FFFFFF',       // White cards
+  surfaceElevated: '#FDFCF9',
+  text: '#1A1A18',          // Ink Black
+  textMuted: '#8A8580',     // Warm gray
+  primary: '#1F4D3A',       // Spinach Green
+  accent: '#D9A441',        // Turmeric Gold
+  success: '#2D7A4F',       // Forest Green
+  waste: '#B3452C',         // Charred Red-Brown
+  border: '#E2E0D8',        // Warm light border
+  borderHighlight: '#C9C5BB',
 };
 
-// --- Mock Images ---
-export const MOCK_BEFORE = "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=800";
-export const MOCK_AFTER = "https://images.unsplash.com/photo-1534422298391-e4f8c171dd54?auto=format&fit=crop&q=80&w=800";
+// --- Mock Images (local assets) ---
+import beforeImg from './images/before_meal.png';
+import afterImg from './images/after_meal.png';
+export const MOCK_BEFORE = beforeImg;
+export const MOCK_AFTER = afterImg;
 
 // --- Mock Results ---
 export const MOCK_RESULTS = {
@@ -29,36 +31,28 @@ export const MOCK_RESULTS = {
   ]
 };
 
-// --- Pipeline Stages (matching real workflow) ---
+// --- Pipeline Stages (5 processing stages, aligned to real flow) ---
 export const PIPELINE_STAGES = [
-  { id: 'val', name: 'Image Validation', details: 'Checking image quality, presence & plate consistency.' },
-  { id: 'pre', name: 'Preprocessing', details: 'Detecting plate boundary via OpenCV, correcting perspective & normalizing.' },
-  { id: 'unet', name: 'U-Net Segmentation', details: 'Separating food regions from plate background pixel-by-pixel.' },
-  { id: 'cnn', name: 'CNN Classification', details: 'Classifying each food segment via MobileNetV3 / EfficientNet-B0.' },
-  { id: 'match', name: 'Siamese Matching', details: 'Matching before–after food regions via embedding similarity.' },
-  { id: 'waste', name: 'Waste Estimation', details: 'Calculating remaining area & consumed percentage per item.' },
-  { id: 'analytics', name: 'Analytics Generation', details: 'Aggregating item-wise waste statistics into final report.' },
+  { id: 'pre',   name: 'Preprocessing',        details: 'Detecting plate boundary, normalizing geometry & correcting lighting via CLAHE.' },
+  { id: 'unet',  name: 'U-Net Segmentation',   details: 'Separating food regions from plate background pixel-by-pixel.' },
+  { id: 'cnn',   name: 'CNN Classification',    details: 'Classifying each food segment: Rice, Chapati, Curry, Dal, Veg.' },
+  { id: 'match', name: 'Before-After Matching', details: 'Matching T0 ↔ T1 food regions via Siamese embedding similarity.' },
+  { id: 'waste', name: 'Waste Estimation',      details: 'Computing per-item consumption: ΔArea / BeforeArea × 100.' },
 ];
 
 // --- Mock Logs ---
 export const MOCK_LOGS = {
-  val: [
-    "[SYS] Loading before_meal.jpg → tensor shape [1, 3, 800, 800]",
-    "[SYS] Loading after_meal.jpg → tensor shape [1, 3, 800, 800]",
-    "[CV2] Blur detection: Laplacian variance = 142.7 > threshold ✓",
-    "[SYS] Plate consistency check: SSIM = 0.93 ✓"
-  ],
   pre: [
     "[CV2] HoughCircles → plate boundary detected (r=312px)",
     "[CV2] Applying perspective homography H(3×3)",
-    "[CV2] Aligning before/after via ORB feature matching (87 inliers)",
+    "[CV2] CLAHE adaptive histogram equalization applied",
     "[CV2] Resized to 224×224, normalized to [0, 1] range"
   ],
   unet: [
     "[U-Net] Encoder: Conv2d(3→64) → BN → ReLU → MaxPool2d",
     "[U-Net] Bottleneck: 512 feature maps, latent shape [512, 14, 14]",
     "[U-Net] Decoder: UpConv2d + skip-connection concat",
-    "[U-Net] Output mask: 5 food classes segmented, mIoU = 0.91"
+    "[U-Net] Output mask: food vs background segmented, mIoU = 0.91"
   ],
   cnn: [
     "[MobileNetV3] Loading ImageNet pretrained weights...",
@@ -78,10 +72,4 @@ export const MOCK_LOGS = {
     "[Calc] Per-item delta ratios computed",
     "[SYS] Overall plate waste estimated: 42%"
   ],
-  analytics: [
-    "[DB] Persisting session to PostgreSQL...",
-    "[Stats] Item-wise consumption rates aggregated",
-    "[Stats] Weekly trend data updated (hostel block A)",
-    "[SYS] Analytics report generated ✓"
-  ]
 };

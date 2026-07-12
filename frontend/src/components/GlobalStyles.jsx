@@ -2,6 +2,10 @@ import React from 'react';
 
 const GlobalStyles = () => (
   <style>{`
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+
     @keyframes scan {
       0% { top: 0%; opacity: 0; }
       10% { opacity: 1; }
@@ -14,24 +18,18 @@ const GlobalStyles = () => (
       0% { background-position: 0% -100%; }
       100% { background-position: 0% 200%; }
     }
-    .animate-matrix { background-image: linear-gradient(0deg, transparent 0%, rgba(0, 112, 243, 0.2) 50%, transparent 100%); background-size: 100% 200%; animation: matrix-rain 3s linear infinite; }
-    
-    @keyframes float-iso {
-      0%, 100% { transform: translateY(0) rotateX(60deg) rotateZ(45deg); }
-      50% { transform: translateY(-10px) rotateX(60deg) rotateZ(45deg); }
-    }
-    .iso-plane { transform: rotateX(60deg) rotateZ(45deg); transform-style: preserve-3d; }
-    .iso-plane-float { animation: float-iso 4s ease-in-out infinite; }
+    .animate-matrix { background-image: linear-gradient(0deg, transparent 0%, rgba(31, 77, 58, 0.15) 50%, transparent 100%); background-size: 100% 200%; animation: matrix-rain 3s linear infinite; }
     
     .dash-flow { stroke-dasharray: 10; animation: dash 1s linear infinite; }
     @keyframes dash { to { stroke-dashoffset: -20; } }
 
-    .glow-text { text-shadow: 0 0 10px rgba(255,255,255,0.3); }
+    .glow-text { text-shadow: none; }
     
-    /* Sleek scrollbar for terminal */
+    /* Warm scrollbar */
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb { background: #C9C5BB; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: #8A8580; }
   `}</style>
 );
 

@@ -1,98 +1,161 @@
 import React from 'react';
 
 // --- Preprocessing Loader ---
-// OpenCV operations: plate boundary detection, perspective correction, normalization
-// Shows a distorted dot grid settling into alignment with a plate boundary circle forming
+// Three sub-phases: plate boundary detection → geometry normalization → CLAHE lighting correction
+// Visual: circular boundary draws itself around a plate, grid straightens, sweep bar corrects lighting
 const PreprocessingLoader = ({ tick }) => {
-  const settle = Math.min(1, tick / 40); // 0→1 over time (settling factor)
+  // Warm earthy palette (renders against dark terminal bg)
+  const C = {
+    green: '#48BB78',
+    greenDim: 'rgba(72, 187, 120, 0.15)',
+    gold: '#D9A441',
+    goldDim: 'rgba(217, 164, 65, 0.12)',
+    line: 'rgba(255, 255, 255, 0.08)',
+    node: 'rgba(255, 255, 255, 0.12)',
+    label: 'rgba(255, 255, 255, 0.3)',
+  };
 
-  // Grid of dots that morph from distorted to aligned
-  const gridNodes = [];
-  for (let i = 0; i < 8; i++) {
-    for (let j = 0; j < 6; j++) {
-      const baseX = 180 + i * 55;
-      const baseY = 60 + j * 50;
-      // Distortion that settles over time
-      const distortion = (1 - settle) * 12;
-      const offsetX = Math.sin((i + j) * 1.3 + tick * 0.1) * distortion;
-      const offsetY = Math.cos((i * j) * 0.7 + tick * 0.08) * distortion;
-      const x = baseX + offsetX;
-      const y = baseY + offsetY;
-      const isActive = ((tick + i * 3 + j * 5) % 20) < 6;
-      gridNodes.push({ x, y, isActive, i, j });
-    }
-  }
+  const totalCycle = 45;
+  const phase = tick % totalCycle;
+  const subPhase = phase < 15 ? 0 : phase < 30 ? 1 : 2;
+  const subLabels = [
+    'Detecting plate boundary...',
+    'Normalizing plate geometry...',
+    'Correcting lighting (CLAHE)...',
+  ];
 
-  // Convolution kernel position
-  const kernelCol = Math.floor((tick / 3) % 8);
-  const kernelRow = Math.floor((tick / 3) / 8) % 6;
-  const kernelX = 180 + kernelCol * 55 - 20;
-  const kernelY = 60 + kernelRow * 50 - 18;
+  const cx = 400, cy = 185;
+  const plateR = 125;
+  const circumference = 2 * Math.PI * plateR;
 
-  // Plate boundary circle (forms as settle increases)
-  const plateR = 135 * settle;
-  const plateCx = 400;
-  const plateCy = 195;
+  // Phase 0: boundary circle draws progressively
+  const drawProgress = subPhase === 0
+    ? Math.min(1, (phase % 15) / 12)
+    : 1;
+
+  // Detection points around the boundary (8 control points)
+  const detectionPoints = Array.from({ length: 8 }, (_, i) => {
+    const angle = (i / 8) * Math.PI * 2 - Math.PI / 2;
+    return {
+      x: cx + plateR * Math.cos(angle),
+      y: cy + plateR * Math.sin(angle),
+      active: drawProgress > (i + 1) / 9,
+    };
+  });
+
+  // Phase 1: perspective grid straightens
+  const settle = subPhase >= 1 ? Math.min(1, ((phase - 15) % 15) / 10) : 0;
+
+  // Phase 2: CLAHE sweep bar moves vertically
+  const sweepProgress = subPhase === 2 ? ((phase - 30) % 15) / 15 : -1;
+  const sweepY = cy - plateR + sweepProgress * plateR * 2;
+
+  // Rotating scan line during boundary detection
+  const scanAngle = (tick * 5) % 360;
+  const scanRad = (scanAngle * Math.PI) / 180;
 
   return (
     <g>
-      {/* Grid edges (connecting adjacent dots) */}
-      {gridNodes.map((n, idx) => {
-        const edges = [];
-        // Connect right neighbor
-        if (n.j < 5) {
-          const rightIdx = idx + 1;
-          const right = gridNodes[rightIdx];
-          if (right && right.j === n.j + 1) {
-            edges.push(
-              <line key={`h-${idx}`} x1={n.x} y1={n.y} x2={right.x} y2={right.y}
-                stroke={n.isActive ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.05)'}
-                strokeWidth="0.7" />
-            );
-          }
-        }
-        // Connect bottom neighbor
-        const belowIdx = idx + 6;
-        const below = gridNodes[belowIdx];
-        if (below) {
-          edges.push(
-            <line key={`v-${idx}`} x1={n.x} y1={n.y} x2={below.x} y2={below.y}
-              stroke={n.isActive ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.05)'}
-              strokeWidth="0.7" />
-          );
-        }
-        return edges;
+      {/* Raw image frame — fades as the plate boundary crops it */}
+      <rect x={cx - 170} y={cy - 130} width="340" height="260" rx="6"
+        fill="rgba(255,255,255,0.02)"
+        stroke={C.line} strokeWidth="1.2"
+        opacity={Math.max(0.15, 1 - drawProgress * 0.85)} />
+
+      {/* Perspective grid lines (distorted → straight) */}
+      {Array.from({ length: 5 }).map((_, i) => {
+        const baseY = cy - 100 + i * 50;
+        const distort = (1 - settle) * (i % 2 === 0 ? 10 : -8);
+        return (
+          <line key={`h${i}`}
+            x1={cx - 140 + distort} y1={baseY}
+            x2={cx + 140 - distort} y2={baseY}
+            stroke={C.line} strokeWidth="0.6" />
+        );
+      })}
+      {Array.from({ length: 7 }).map((_, i) => {
+        const baseX = cx - 140 + i * 47;
+        const distort = (1 - settle) * (i % 2 === 0 ? 8 : -5);
+        return (
+          <line key={`v${i}`}
+            x1={baseX} y1={cy - 100 + distort}
+            x2={baseX} y2={cy + 100 - distort}
+            stroke={C.line} strokeWidth="0.6" />
+        );
       })}
 
-      {/* Grid dots */}
-      {gridNodes.map((n, idx) => (
-        <g key={`n-${idx}`}>
-          {n.isActive && <circle cx={n.x} cy={n.y} r="8" fill="rgba(59,130,246,0.1)" />}
-          <circle cx={n.x} cy={n.y} r={n.isActive ? 3.5 : 2}
-            fill={n.isActive ? '#3B82F6' : 'rgba(255,255,255,0.25)'}
-            stroke={n.isActive ? 'rgba(59,130,246,0.4)' : 'none'}
-            strokeWidth="1" />
+      {/* Plate boundary — ghost ring */}
+      <circle cx={cx} cy={cy} r={plateR}
+        fill="none" stroke={C.greenDim} strokeWidth="2" />
+
+      {/* Plate boundary — animated draw */}
+      <circle cx={cx} cy={cy} r={plateR}
+        fill="none" stroke={C.green} strokeWidth="2.5"
+        strokeDasharray={circumference}
+        strokeDashoffset={circumference * (1 - drawProgress)}
+        strokeLinecap="round"
+        transform={`rotate(-90 ${cx} ${cy})`} />
+
+      {/* Detection control points */}
+      {detectionPoints.map((pt, i) => (
+        <g key={i}>
+          {pt.active && (
+            <circle cx={pt.x} cy={pt.y} r="10" fill={C.greenDim} />
+          )}
+          <circle cx={pt.x} cy={pt.y}
+            r={pt.active ? 3.5 : 2}
+            fill={pt.active ? C.green : C.node}
+            stroke={pt.active ? C.greenDim : 'none'}
+            strokeWidth="2" />
         </g>
       ))}
 
-      {/* Convolution kernel window */}
-      <rect x={kernelX} y={kernelY} width="50" height="40" rx="4"
-        fill="none" stroke="rgba(255,255,255,0.6)" strokeWidth="1.5"
-        className="transition-all duration-75" />
-      <text x={kernelX + 25} y={kernelY - 6} fill="rgba(255,255,255,0.3)" fontSize="8" fontFamily="monospace" textAnchor="middle">
-        kernel(3×3)
+      {/* Rotating scan line (phase 0 only) */}
+      {subPhase === 0 && (
+        <line
+          x1={cx} y1={cy}
+          x2={cx + plateR * 0.85 * Math.cos(scanRad)}
+          y2={cy + plateR * 0.85 * Math.sin(scanRad)}
+          stroke={C.green} strokeWidth="1.2" opacity="0.4" />
+      )}
+
+      {/* Soft green fill inside circle when geometry is normalized */}
+      {subPhase >= 1 && (
+        <circle cx={cx} cy={cy} r={plateR - 3}
+          fill={C.greenDim} opacity={0.2 * settle} />
+      )}
+
+      {/* CLAHE sweep bar (phase 2) */}
+      {subPhase === 2 && sweepY > cy - plateR && sweepY < cy + plateR && (
+        <g>
+          <line x1={cx - plateR + 15} y1={sweepY}
+            x2={cx + plateR - 15} y2={sweepY}
+            stroke={C.gold} strokeWidth="2" opacity="0.7" />
+          <rect x={cx - plateR + 15} y={sweepY}
+            width={(plateR - 15) * 2} height="22"
+            fill={C.goldDim} opacity="0.5" />
+        </g>
+      )}
+
+      {/* Sub-phase progress dots */}
+      {[0, 1, 2].map((i) => (
+        <circle key={i} cx={cx - 20 + i * 20} cy="335"
+          r={subPhase === i ? 4 : 2.5}
+          fill={i <= subPhase ? C.green : C.node}
+          opacity={subPhase === i ? 1 : (i < subPhase ? 0.5 : 0.25)} />
+      ))}
+
+      {/* Current operation label */}
+      <text x={cx} y="360" fill={C.label} fontSize="10"
+        fontFamily="monospace" textAnchor="middle">
+        {subLabels[subPhase]}
       </text>
 
-      {/* Plate boundary circle */}
-      <circle cx={plateCx} cy={plateCy} r={plateR}
-        fill="none" stroke="rgba(16,185,129,0.3)" strokeWidth="1.5"
-        strokeDasharray="8,4" opacity={settle * 0.8} />
-
-      {/* OpenCV label */}
-      <text x="80" y="380" fill="rgba(255,255,255,0.3)" fontSize="11" fontFamily="monospace" fontWeight="bold">
-        OpenCV
-      </text>
-      <text x="400" y="380" fill="rgba(255,255,255,0.12)" fontSize="9" fontFamily="monospace" textAnchor="middle" letterSpacing="3">
+      {/* Stage badge */}
+      <text x="80" y="380" fill="rgba(255,255,255,0.25)" fontSize="11"
+        fontFamily="monospace" fontWeight="bold">OpenCV</text>
+      <text x={cx} y="380" fill="rgba(255,255,255,0.1)" fontSize="9"
+        fontFamily="monospace" textAnchor="middle" letterSpacing="3">
         PREPROCESSING
       </text>
     </g>

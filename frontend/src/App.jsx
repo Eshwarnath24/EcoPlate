@@ -15,24 +15,24 @@ export default function App() {
   useEffect(() => { window.scrollTo({ top: 0, behavior: 'smooth' }); }, [appState]);
 
   return (
-    <div style={{ backgroundColor: THEME.bg, color: THEME.text }} className="min-h-screen font-sans overflow-x-hidden selection:bg-white selection:text-black">
+    <div style={{ backgroundColor: THEME.bg, color: THEME.text }} className="min-h-screen font-sans overflow-x-hidden selection:bg-emerald-100 selection:text-emerald-900">
       <GlobalStyles />
       
-      {/* Global Cursor Spotlight */}
+      {/* Subtle warm cursor spotlight */}
       <div 
         className="pointer-events-none fixed inset-0 z-50 transition-opacity duration-300"
         style={{ 
-          background: `radial-gradient(800px circle at ${mousePos.x}px ${mousePos.y}px, rgba(255,255,255,0.03), transparent 40%)`,
+          background: `radial-gradient(600px circle at ${mousePos.x}px ${mousePos.y}px, rgba(31,77,58,0.04), transparent 40%)`,
           opacity: mousePos.x ? 1 : 0 
         }} 
       />
 
-      {/* Grid Background */}
-      <div className="fixed inset-0 pointer-events-none opacity-20" style={{ backgroundImage: `linear-gradient(${THEME.border} 1px, transparent 1px), linear-gradient(90deg, ${THEME.border} 1px, transparent 1px)`, backgroundSize: '40px 40px' }} />
+      {/* Subtle dot grid background */}
+      <div className="fixed inset-0 pointer-events-none opacity-30" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(0,0,0,0.06) 1px, transparent 0)', backgroundSize: '24px 24px' }} />
 
       <NavBar onHome={() => setAppState('landing')} />
       
-      <main className="max-w-6xl mx-auto px-6 py-12 relative z-10">
+      <main className="max-w-7xl mx-auto px-6 py-12 relative z-10">
         {appState === 'landing' && <LandingPage onStart={() => setAppState('upload')} />}
         {(appState === 'upload' || appState === 'analyzing') && (
           <AnalysisPage images={images} setImages={setImages} appState={appState} setAppState={setAppState} />
