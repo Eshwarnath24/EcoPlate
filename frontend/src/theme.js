@@ -29,45 +29,52 @@ export const MOCK_RESULTS = {
   ]
 };
 
-// --- Pipeline Stages (5 processing stages, aligned to real flow) ---
+// --- Pipeline Stages (6 processing stages, aligned to real flow) ---
 export const PIPELINE_STAGES = [
-  { id: 'pre',   name: 'Preprocessing',        details: 'Detecting plate boundary, normalizing geometry & correcting lighting via CLAHE.' },
-  { id: 'unet',  name: 'U-Net Segmentation',   details: 'Separating food regions from plate background pixel-by-pixel.' },
-  { id: 'cnn',   name: 'CNN Classification',    details: 'Classifying each food segment: Rice, Chapati, Curry, Dal, Veg.' },
-  { id: 'match', name: 'Before-After Matching', details: 'Matching T0 ↔ T1 food regions via Siamese embedding similarity.' },
-  { id: 'waste', name: 'Waste Estimation',      details: 'Computing per-item consumption: ΔArea / BeforeArea × 100.' },
+  { id: 'acq',   name: 'Data Acquisition & Annotation', details: 'Staff capture before and after photos to track food.' },
+  { id: 'bench', name: 'Model Benchmarking', details: 'We test multiple AI models to find the best.' },
+  { id: 'edge',  name: 'Edge Optimization', details: 'The winning AI is shrunk to fit on smartphones.' },
+  { id: 'infer', name: 'On-Device Inference', details: 'The app scans plates instantly without needing the internet.' },
+  { id: 'calc',  name: 'Area Math & Waste Calculation', details: 'The system calculates exact waste percentages for each ingredient.' },
+  { id: 'dash',  name: 'Dashboard Integration', details: 'Waste data syncs directly to a live manager dashboard.' }
 ];
 
 // --- Mock Logs ---
 export const MOCK_LOGS = {
-  pre: [
-    "[CV2] HoughCircles → plate boundary detected (r=312px)",
-    "[CV2] Applying perspective homography H(3×3)",
-    "[CV2] CLAHE adaptive histogram equalization applied",
-    "[CV2] Resized to 224×224, normalized to [0, 1] range"
+  acq: [
+    "[Camera] Capturing T0 (Before Meal) at 4K resolution",
+    "[Camera] Capturing T1 (After Meal) at 4K resolution",
+    "[Storage] Annotating bounding boxes & pixel masks",
+    "[DB] Saved to tracking server for model training"
   ],
-  unet: [
-    "[U-Net] Encoder: Conv2d(3→64) → BN → ReLU → MaxPool2d",
-    "[U-Net] Bottleneck: 512 feature maps, latent shape [512, 14, 14]",
-    "[U-Net] Decoder: UpConv2d + skip-connection concat",
-    "[U-Net] Output mask: food vs background segmented, mIoU = 0.91"
+  bench: [
+    "[Test] Evaluating U-Net vs DeepLabV3 vs YOLOv8-Nano",
+    "[Test] MobileNetV3 vs ResNet inference time",
+    "[Result] MobileNetV3 + U-Net architecture selected",
+    "[Metrics] Accuracy: 94.2%, Latency: 42ms"
   ],
-  cnn: [
-    "[MobileNetV3] Loading ImageNet pretrained weights...",
-    "[MobileNetV3] Feature extraction → 1280-dim embedding",
-    "[FC] Softmax over 5 food classes",
-    "[SYS] Rice(0.94) Chapati(0.91) Curry(0.87) Dal(0.96) Veg(0.89)"
+  edge: [
+    "[ONNX] Exporting PyTorch models to ONNX format",
+    "[TFLite] Quantizing weights to INT8 representation",
+    "[Optimize] Pruning redundant layers",
+    "[Build] Final model size reduced by 78%"
   ],
-  match: [
-    "[Siamese] Encoding T0 food regions → latent vectors",
-    "[Siamese] Encoding T1 food regions → latent vectors",
-    "[Math] Cosine similarity matrix computed (5×5)",
-    "[SYS] Matched 5/5 regions — avg similarity: 0.847"
+  infer: [
+    "[NPU] Loading quantized model into neural engine",
+    "[Scan] Processing T0 frame at 30 FPS",
+    "[Scan] Processing T1 frame at 30 FPS",
+    "[Edge] Real-time on-device inference complete"
   ],
-  waste: [
-    "[Calc] T0 areas: Rice=452px² Chapati=380px² Curry=510px²",
-    "[Calc] T1 areas: Rice=158px² Chapati=114px² Curry=408px²",
-    "[Calc] Per-item delta ratios computed",
-    "[SYS] Overall plate waste estimated: 42%"
+  calc: [
+    "[Math] T0 area: Rice=450px² Curry=510px²",
+    "[Math] T1 area: Rice=150px² Curry=400px²",
+    "[Math] Computing pixel-wise deltas",
+    "[SYS] Waste percentages successfully calculated"
   ],
+  dash: [
+    "[Sync] Connecting to dashboard API securely",
+    "[Data] Pushing waste telemetry data",
+    "[Graph] Updating real-time manager view",
+    "[Success] Dashboard synchronized"
+  ]
 };

@@ -18,11 +18,12 @@ const THEME = {
 };
 
 const PIPELINE_STAGES = [
-  { id: 1, name: 'Semantic Segmentation', details: <span>Isolates distinct food items and boundaries from the background using a customized <strong className="font-semibold text-emerald-800 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-100">U-Net architecture</strong>.</span> },
-  { id: 2, name: 'Feature Extraction', details: <span>Generates deep, multidimensional embeddings for each detected food cluster to capture textures and colors.</span> },
-  { id: 3, name: 'Item Classification', details: <span>Identifies specific food categories (e.g., Rice, Dal, Chapati) utilizing a fine-tuned <strong className="font-semibold text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-100">MobileNetV3</strong>.</span> },
-  { id: 4, name: 'Siamese Matching', details: <span>Correlates pre-consumption and post-consumption food items across plates using a <strong className="font-semibold text-emerald-800 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-100">Siamese Network</strong>.</span> },
-  { id: 5, name: 'Waste Analytics', details: <span>Calculates the volumetric and pixel-wise area differences to accurately estimate item-wise waste percentages.</span> }
+  { id: 1, name: 'Data Acquisition & Annotation', details: <span>Staff capture before and after photos to track food.</span> },
+  { id: 2, name: 'Model Benchmarking', details: <span>We test multiple AI models to find the best.</span> },
+  { id: 3, name: 'Edge Optimization', details: <span>The winning AI is shrunk to fit on smartphones.</span> },
+  { id: 4, name: 'On-Device Inference', details: <span>The app scans plates instantly without needing the internet.</span> },
+  { id: 5, name: 'Area Math & Waste Calculation', details: <span>The system calculates exact waste percentages for each ingredient.</span> },
+  { id: 6, name: 'Dashboard Integration', details: <span>Waste data syncs directly to a live manager dashboard.</span> }
 ];
 
 const Button = ({ children, onClick, className = '', variant = 'primary' }) => {
@@ -164,7 +165,7 @@ const LandingPage = ({ onStart }) => (
               How the Pipeline <span className="font-serif-italic font-medium text-emerald-800">Works</span>
             </h2>
             <p className="max-w-2xl mx-auto text-lg md:text-xl font-medium text-slate-700 leading-relaxed">
-              A 5-stage neural pipeline — from raw image input to actionable waste analytics.
+              A 6-stage neural pipeline — from raw image input to actionable waste analytics.
             </p>
           </div>
         </Reveal>
@@ -177,12 +178,13 @@ const LandingPage = ({ onStart }) => (
               const isLeft = i % 2 === 0;
               const icons = [
                 <Scan size={24} />,
-                <Layers size={24} />,
+                <Target size={24} />,
+                <Zap size={24} />,
                 <Cpu size={24} />,
                 <GitMerge size={24} />,
                 <BarChart3 size={24} />,
               ];
-              const stageColors = [THEME.primary, THEME.success, THEME.accent, THEME.primary, THEME.waste];
+              const stageColors = [THEME.primary, THEME.success, THEME.accent, THEME.primary, THEME.waste, THEME.success];
               return (
                 <Reveal key={step.id} delay={i * 150} direction={isLeft ? 'from-left' : 'from-right'}>
                   <div className={`flex flex-col md:flex-row items-center gap-6 ${isLeft ? '' : 'md:flex-row-reverse'}`}>

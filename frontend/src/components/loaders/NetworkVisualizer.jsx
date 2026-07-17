@@ -12,11 +12,12 @@ const NetworkVisualizer = ({ stageId, tick }) => {
   const vh = 400;
 
   const renders = {
-    pre: () => <PreprocessingLoader tick={tick} />,
-    unet: () => <UNetLoader tick={tick} />,
-    cnn: () => <CNNLoader tick={tick} />,
-    match: () => <MatchLoader tick={tick} />,
-    waste: () => <WasteLoader tick={tick} />,
+    acq: () => <PreprocessingLoader tick={tick} />,
+    bench: () => <UNetLoader tick={tick} />,
+    edge: () => <CNNLoader tick={tick} />,
+    infer: () => <MatchLoader tick={tick} />,
+    calc: () => <WasteLoader tick={tick} />,
+    dash: () => <CompletionLoader tick={tick} />,
     done: () => <CompletionLoader tick={tick} />,
   };
 
