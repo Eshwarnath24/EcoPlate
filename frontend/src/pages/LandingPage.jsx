@@ -279,7 +279,7 @@ const LandingPage = ({ onStart }) => (
             { name: 'Kalepu Lohith', role: 'Full Stack · Deep Learning', email: 'lohithkalepu@gmail.com', github: 'Lohi712' },
           ].map((member, i) => (
             <Reveal key={member.name} delay={i * 150} direction="from-bottom">
-              <div className="rounded-3xl border p-8 group hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 text-center bg-white/80 backdrop-blur-md h-full" style={{ borderColor: 'rgba(255,255,255,0.9)' }}>
+              <div className="rounded-3xl border p-8 group hover:shadow-2xl hover:-translate-y-2 hover:-rotate-2 transition-all duration-300 text-center bg-white/80 backdrop-blur-md h-full" style={{ borderColor: 'rgba(255,255,255,0.9)' }}>
                 <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-5 bg-gradient-to-br from-emerald-50 to-white transition-all group-hover:scale-110 shadow-md border-2" style={{ borderColor: 'rgba(31, 77, 58, 0.15)' }}>
                   <span className="text-2xl font-bold tracking-wider text-emerald-800">
                     {member.name.split(' ').map(w => w[0]).join('')}

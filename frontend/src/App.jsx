@@ -6,6 +6,7 @@ import NavBar from './components/NavBar';
 import LandingPage from './pages/LandingPage';
 import AnalysisPage from './pages/AnalysisPage';
 import ReportPage from './pages/ReportPage';
+import CodedNatureBackground from './components/CodedNatureBackground';
 
 export default function App() {
   const [appState, setAppState] = useState('landing');
@@ -15,9 +16,11 @@ export default function App() {
   useEffect(() => { window.scrollTo({ top: 0, behavior: 'smooth' }); }, [appState]);
 
   return (
-    <div style={{ backgroundColor: THEME.bg, color: THEME.text }} className="min-h-screen font-sans overflow-x-hidden selection:bg-emerald-100 selection:text-emerald-900">
+    <div style={{ color: THEME.text }} className="min-h-screen font-sans overflow-x-hidden selection:bg-green-200 relative bg-transparent">
       <GlobalStyles />
       
+      {appState !== 'landing' && <CodedNatureBackground />}
+
       {/* Subtle warm cursor spotlight */}
       <div 
         className="pointer-events-none fixed inset-0 z-50 transition-opacity duration-300"
@@ -32,15 +35,20 @@ export default function App() {
 
       {appState !== 'landing' && <NavBar onHome={() => setAppState('landing')} />}
       
-      <main className="max-w-7xl mx-auto px-6 py-12 relative z-10">
-        {appState === 'landing' && <LandingPage onStart={() => setAppState('upload')} />}
-        {(appState === 'upload' || appState === 'analyzing') && (
-          <AnalysisPage images={images} setImages={setImages} appState={appState} setAppState={setAppState} />
-        )}
-        {appState === 'results' && (
-          <ReportPage onReset={() => { setImages({ before: null, after: null }); setAppState('upload'); }} />
-        )}
-      </main>
+      {appState === 'landing' ? (
+        <main className="relative z-10">
+          <LandingPage onStart={() => setAppState('upload')} />
+        </main>
+      ) : (
+        <main className="max-w-7xl mx-auto px-6 py-12 pt-28 relative z-10">
+          {(appState === 'upload' || appState === 'analyzing') && (
+            <AnalysisPage images={images} setImages={setImages} appState={appState} setAppState={setAppState} />
+          )}
+          {appState === 'results' && (
+            <ReportPage onReset={() => { setImages({ before: null, after: null }); setAppState('upload'); }} />
+          )}
+        </main>
+      )}
     </div>
   );
 }

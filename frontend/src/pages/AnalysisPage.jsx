@@ -9,11 +9,11 @@ const UploadZone = ({ title, image, onClick }) => (
   <div 
     onClick={onClick}
     className="relative group cursor-pointer h-80 rounded-xl border-2 border-dashed flex flex-col items-center justify-center transition-all overflow-hidden"
-    style={{ borderColor: image ? THEME.primary : THEME.border, backgroundColor: image ? 'transparent' : THEME.surface }}
+    style={{ borderColor: image ? THEME.primary : THEME.border, backgroundColor: THEME.surface }}
   >
     {image ? (
       <>
-        <img src={image} alt={title} className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-700 group-hover:scale-105" />
+        <img src={image} alt={title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
         <div className="absolute bottom-4 left-4 right-4 flex justify-between items-center text-xs font-mono">
           <span className="px-2 py-1 rounded border backdrop-blur-md" style={{ backgroundColor: `${THEME.success}20`, color: THEME.success, borderColor: `${THEME.success}40` }}>LOADED</span>
@@ -26,7 +26,7 @@ const UploadZone = ({ title, image, onClick }) => (
           <UploadCloud size={24} style={{ color: THEME.primary }} />
         </div>
         <h3 className="font-semibold text-sm mb-1" style={{ color: THEME.text }}>{title}</h3>
-        <p className="text-xs font-mono opacity-60">Click to upload image</p>
+        <p className="text-xs font-mono opacity-60">Click or drag to ingest image tensor</p>
       </div>
     )}
   </div>
@@ -41,19 +41,23 @@ const UploadFlow = ({ images, setImages, onAnalyze }) => {
 
   return (
     <div className="max-w-4xl mx-auto space-y-16 animate-in slide-in-from-bottom-12 duration-700 fade-in pt-10">
-      <div className="text-center space-y-4">
-        <h2 className="text-3xl font-semibold tracking-tight" style={{ color: THEME.text }}>Upload Meal Photos</h2>
-        <p className="font-light" style={{ color: THEME.textMuted }}>Upload before and after meal photos for waste analysis.</p>
+      <div className="text-center space-y-6 mb-10 p-8 rounded-3xl flex flex-col items-center w-full bg-white/45 backdrop-blur-md border shadow-sm mx-auto max-w-3xl" style={{ borderColor: 'rgba(255,255,255,0.5)' }}>
+        <div className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border font-semibold text-xs tracking-[0.2em] uppercase shadow-sm bg-emerald-50/90" style={{ borderColor: 'rgba(31, 77, 58, 0.25)', color: THEME.primary }}>
+          <div className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
+          Data Input
+        </div>
+        <h2 className="text-5xl md:text-6xl font-extrabold tracking-tight" style={{ color: THEME.text }}>Data Ingestion</h2>
+        <p className="max-w-2xl mx-auto text-lg font-bold leading-relaxed" style={{ color: THEME.text }}>Provide high-resolution captures of your plate before and after consumption to initiate the deep learning pipeline.</p>
       </div>
 
       <div className="grid md:grid-cols-2 gap-6">
-        <UploadZone title="Before Meal (T0)" image={images.before} onClick={() => handleMockUpload('before')} />
-        <UploadZone title="After Meal (T1)" image={images.after} onClick={() => handleMockUpload('after')} />
+        <UploadZone title="Pre-Consumption (T0)" image={images.before} onClick={() => handleMockUpload('before')} />
+        <UploadZone title="Post-Consumption (T1)" image={images.after} onClick={() => handleMockUpload('after')} />
       </div>
 
       <div className="flex justify-center pt-8">
         <Button onClick={onAnalyze} disabled={!isReady} className="w-full md:w-auto px-12 py-4">
-          {isReady ? 'Start Analysis' : 'Upload Both Images'} <Play size={16} className={isReady ? 'animate-pulse' : ''} />
+          {isReady ? 'Initialize Neural Pipeline' : 'Awaiting Input Tensors'} <Play size={16} className={isReady ? 'animate-pulse' : ''} />
         </Button>
       </div>
     </div>

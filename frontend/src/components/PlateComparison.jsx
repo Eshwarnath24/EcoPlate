@@ -21,7 +21,7 @@ const PlateComparison = () => {
       <style>{scanStyle}</style>
 
       {/* Main Comparison Container (No overflow-hidden on this outer container to ensure child backdrop blurs work) */}
-      <div className="relative w-full h-[520px] md:h-[600px] rounded-3xl shadow-2xl backdrop-blur-md" style={{ border: `1px solid rgba(255,255,255,0.45)`, backgroundColor: `rgba(255,255,255,0.1)` }}>
+      <div className="relative w-full h-[520px] md:h-[600px] rounded-3xl shadow-2xl" style={{ border: `1px solid rgba(255,255,255,0.45)`, backgroundColor: THEME.surface }}>
         <div className="absolute inset-0 flex">
           {/* Before side (Left half with rounded left corners) */}
           <div

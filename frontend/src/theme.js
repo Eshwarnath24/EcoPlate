@@ -1,16 +1,14 @@
 // --- Warm Earthy Theme Constants (EcoPlate organic vibe) ---
 export const THEME = {
-  bg: '#F6F3EC',           // Bone / Cream
-  surface: '#FFFFFF',       // White cards
-  surfaceElevated: '#FDFCF9',
-  text: '#1A1A18',          // Ink Black
-  textMuted: '#8A8580',     // Warm gray
-  primary: '#1F4D3A',       // Spinach Green
-  accent: '#D9A441',        // Turmeric Gold
-  success: '#2D7A4F',       // Forest Green
-  waste: '#B3452C',         // Charred Red-Brown
-  border: '#E2E0D8',        // Warm light border
-  borderHighlight: '#C9C5BB',
+  bg: '#FFFFFF',
+  primary: '#1F4D3A',
+  success: '#4CAF50',
+  accent: '#D9A441',
+  waste: '#EF4444',
+  surface: '#F8FAFC',
+  border: '#E2E8F0',
+  text: '#0F172A',
+  textMuted: '#64748B'
 };
 
 // --- Mock Images (local assets) ---
