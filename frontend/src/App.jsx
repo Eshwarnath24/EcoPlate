@@ -30,7 +30,7 @@ export default function App() {
       {/* Subtle dot grid background */}
       <div className="fixed inset-0 pointer-events-none opacity-30" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(0,0,0,0.06) 1px, transparent 0)', backgroundSize: '24px 24px' }} />
 
-      <NavBar onHome={() => setAppState('landing')} />
+      {appState !== 'landing' && <NavBar onHome={() => setAppState('landing')} />}
       
       <main className="max-w-7xl mx-auto px-6 py-12 relative z-10">
         {appState === 'landing' && <LandingPage onStart={() => setAppState('upload')} />}
