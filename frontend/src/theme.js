@@ -1,14 +1,14 @@
-// --- Warm Earthy Theme Constants (EcoPlate organic vibe) ---
+// --- Premium Restaurant Theme Constants (EcoPlate Kitchen Analytics) ---
 export const THEME = {
-  bg: '#FFFFFF',
-  primary: '#1F4D3A',
-  success: '#4CAF50',
-  accent: '#D9A441',
-  waste: '#EF4444',
-  surface: '#F8FAFC',
-  border: '#E2E8F0',
-  text: '#0F172A',
-  textMuted: '#64748B'
+  bg: '#09090b',         // zinc-950
+  primary: '#ea580c',    // orange-600 (Appetizing warm)
+  success: '#10b981',    // emerald-500
+  accent: '#f59e0b',     // amber-500
+  waste: '#ef4444',      // red-500
+  surface: '#18181b',    // zinc-900
+  border: '#27272a',     // zinc-800
+  text: '#f4f4f5',       // zinc-50
+  textMuted: '#a1a1aa'   // zinc-400
 };
 
 // --- Mock Images (local assets) ---
@@ -29,52 +29,52 @@ export const MOCK_RESULTS = {
   ]
 };
 
-// --- Pipeline Stages (6 processing stages, aligned to real flow) ---
+// --- Pipeline Stages (6 processing stages, aligned to restaurant flow) ---
 export const PIPELINE_STAGES = [
-  { id: 'acq',   name: 'Data Acquisition & Annotation', details: 'Staff capture before and after photos to track food.' },
-  { id: 'bench', name: 'Model Benchmarking', details: 'We test multiple AI models to find the best.' },
-  { id: 'edge',  name: 'Edge Optimization', details: 'The winning AI is shrunk to fit on smartphones.' },
-  { id: 'infer', name: 'On-Device Inference', details: 'The app scans plates instantly without needing the internet.' },
-  { id: 'calc',  name: 'Area Math & Waste Calculation', details: 'The system calculates exact waste percentages for each ingredient.' },
-  { id: 'dash',  name: 'Dashboard Integration', details: 'Waste data syncs directly to a live manager dashboard.' }
+  { id: 'acq',   name: 'POS Data & Plate Capture', details: 'Expeditor captures plate return tied to POS ticket.' },
+  { id: 'bench', name: 'Menu Item Mapping', details: 'Matching plate contents against active menu catalog.' },
+  { id: 'edge',  name: 'Ingredient Segmentation', details: 'Isolating proteins, carbs, and garnishes.' },
+  { id: 'infer', name: 'Volumetric Depth Scan', details: 'Real-time calculation of remaining portion sizes.' },
+  { id: 'calc',  name: 'Cost Discrepancy Math', details: 'Translating leftover volume into exact financial waste.' },
+  { id: 'dash',  name: 'Executive Dashboard Sync', details: 'Pushing waste metrics to back-office inventory system.' }
 ];
 
 // --- Mock Logs ---
 export const MOCK_LOGS = {
   acq: [
-    "[Camera] Capturing T0 (Before Meal) at 4K resolution",
-    "[Camera] Capturing T1 (After Meal) at 4K resolution",
-    "[Storage] Annotating bounding boxes & pixel masks",
-    "[DB] Saved to tracking server for model training"
+    "[Scanner] Capturing Ticket #402 (Service out)",
+    "[Scanner] Capturing Ticket #402 (Plate return)",
+    "[Vision] Annotating ingredients & sauces",
+    "[DB] Saved to kitchen analytics server"
   ],
   bench: [
-    "[Test] Evaluating U-Net vs DeepLabV3 vs YOLOv8-Nano",
-    "[Test] MobileNetV3 vs ResNet inference time",
-    "[Result] MobileNetV3 + U-Net architecture selected",
-    "[Metrics] Accuracy: 94.2%, Latency: 42ms"
+    "[MenuSync] Fetching today's POS menu catalog",
+    "[Match] Evaluating against signature dishes",
+    "[Result] Matched: Thali Special (ID: TH-04)",
+    "[Metrics] Identification Confidence: 94.2%"
   ],
   edge: [
-    "[ONNX] Exporting PyTorch models to ONNX format",
-    "[TFLite] Quantizing weights to INT8 representation",
-    "[Optimize] Pruning redundant layers",
-    "[Build] Final model size reduced by 78%"
+    "[AI] Running semantic segmentation on plate area",
+    "[Isolate] Separating Rice, Curry, Dal, Veg",
+    "[Optimize] Enhancing edges of sauce spills",
+    "[Vision] Mask generation complete"
   ],
   infer: [
-    "[NPU] Loading quantized model into neural engine",
-    "[Scan] Processing T0 frame at 30 FPS",
-    "[Scan] Processing T1 frame at 30 FPS",
-    "[Edge] Real-time on-device inference complete"
+    "[Depth] Loading 3D volumetric model",
+    "[Scan] Processing Service-Out frame",
+    "[Scan] Processing Plate-Return frame",
+    "[Compute] Volumetric delta calculated"
   ],
   calc: [
-    "[Math] T0 area: Rice=450px² Curry=510px²",
-    "[Math] T1 area: Rice=150px² Curry=400px²",
-    "[Math] Computing pixel-wise deltas",
-    "[SYS] Waste percentages successfully calculated"
+    "[Cost] Rice waste: 42g (Cost: $0.15)",
+    "[Cost] Curry waste: 20g (Cost: $0.85)",
+    "[Math] Computing aggregate plate loss",
+    "[SYS] Total financial waste calculated: $1.00"
   ],
   dash: [
-    "[Sync] Connecting to dashboard API securely",
-    "[Data] Pushing waste telemetry data",
-    "[Graph] Updating real-time manager view",
-    "[Success] Dashboard synchronized"
+    "[API] Connecting to inventory management API",
+    "[Data] Pushing ingredient deduction adjustments",
+    "[Graph] Updating Chef's live overview",
+    "[Success] Kitchen metrics synchronized"
   ]
 };
