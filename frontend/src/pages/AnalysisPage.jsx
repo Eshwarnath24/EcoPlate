@@ -5,60 +5,141 @@ import { THEME, MOCK_BEFORE, MOCK_AFTER, PIPELINE_STAGES, MOCK_LOGS } from '../t
 import Button from '../components/Button';
 import { NetworkVisualizer } from '../components/loaders';
 
-// --- Upload Zone Sub-component ---
+// --- Upload Zone Sub-component (Compact for multi-table) ---
 const UploadZone = ({ title, subtitle, image, onClick }) => (
   <div 
     onClick={onClick}
-    className="relative group cursor-pointer h-80 rounded-xl border-2 border-dashed flex flex-col items-center justify-center transition-all overflow-hidden"
+    className="relative group cursor-pointer h-44 rounded-xl border-2 border-dashed flex flex-col items-center justify-center transition-all overflow-hidden hover:border-orange-500/60"
     style={{ borderColor: image ? THEME.primary : THEME.border, backgroundColor: THEME.surface }}
   >
     {image ? (
       <>
         <img src={image} alt={title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-        <div className="absolute bottom-4 left-4 right-4 flex justify-between items-center text-xs font-mono">
-          <span className="px-2 py-1 rounded backdrop-blur-md font-bold shadow-sm" style={{ backgroundColor: `${THEME.success}90`, color: '#fff' }}>SYNCED</span>
-          <span className="px-2 py-1 rounded backdrop-blur-md" style={{ backgroundColor: 'rgba(0,0,0,0.6)', color: 'rgba(255,255,255,0.8)' }}>RES: 4K (PASS)</span>
+        <div className="absolute bottom-3 left-3 right-3 flex justify-between items-center text-xs font-mono">
+          <span className="px-2 py-0.5 rounded backdrop-blur-md font-bold shadow-sm text-[10px]" style={{ backgroundColor: `${THEME.success}90`, color: '#fff' }}>SYNCED</span>
+          <span className="px-2 py-0.5 rounded backdrop-blur-md text-[10px]" style={{ backgroundColor: 'rgba(0,0,0,0.6)', color: 'rgba(255,255,255,0.8)' }}>4K ✓</span>
         </div>
       </>
     ) : (
-      <div className="text-center p-6 transition-colors relative z-10 flex flex-col items-center" style={{ color: THEME.textMuted }}>
-        <div className="w-16 h-16 rounded-full border flex items-center justify-center mb-4 transition-colors group-hover:shadow-md" style={{ backgroundColor: `${THEME.primary}10`, borderColor: THEME.border }}>
-          <Camera size={24} style={{ color: THEME.primary }} />
+      <div className="text-center p-4 transition-colors relative z-10 flex flex-col items-center" style={{ color: THEME.textMuted }}>
+        <div className="w-12 h-12 rounded-full border flex items-center justify-center mb-3 transition-colors group-hover:shadow-md" style={{ backgroundColor: `${THEME.primary}10`, borderColor: THEME.border }}>
+          <Camera size={20} style={{ color: THEME.primary }} />
         </div>
-        <h3 className="font-bold text-sm mb-1" style={{ color: THEME.text }}>{title}</h3>
-        <p className="text-xs font-mono opacity-80">{subtitle}</p>
+        <h3 className="font-bold text-xs mb-0.5" style={{ color: THEME.text }}>{title}</h3>
+        <p className="text-[10px] font-mono opacity-80">{subtitle}</p>
       </div>
     )}
   </div>
 );
 
-// --- Upload Flow (Data Ingestion) ---
+// --- Upload Flow (6 Tables with Before/After) ---
 const UploadFlow = ({ images, setImages, onAnalyze }) => {
-  const handleMockUpload = (type) => {
-    setImages(prev => ({ ...prev, [type]: type === 'before' ? MOCK_BEFORE : MOCK_AFTER }));
+  const handleMockUpload = (tableIdx, type) => {
+    setImages(prev => prev.map((table, i) => 
+      i === tableIdx 
+        ? { ...table, [type]: type === 'before' ? MOCK_BEFORE : MOCK_AFTER }
+        : table
+    ));
   };
-  const isReady = images.before && images.after;
+
+  const completedTables = images.filter(t => t.before && t.after).length;
+  const isReady = completedTables >= 1; // At least 1 table must have both scans
 
   return (
-    <div className="max-w-4xl mx-auto space-y-16 animate-in slide-in-from-bottom-12 duration-700 fade-in pt-10">
-      <div className="text-center space-y-6 mb-10 p-8 rounded-3xl flex flex-col items-center w-full backdrop-blur-md border shadow-sm mx-auto max-w-3xl" style={{ backgroundColor: THEME.surface, borderColor: THEME.border }}>
+    <div className="max-w-5xl mx-auto space-y-10 animate-in slide-in-from-bottom-12 duration-700 fade-in pt-10">
+      {/* Header */}
+      <div className="text-center space-y-5 mb-8 p-8 rounded-3xl flex flex-col items-center w-full backdrop-blur-md border shadow-sm mx-auto max-w-4xl" style={{ backgroundColor: THEME.surface, borderColor: THEME.border }}>
         <div className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border font-semibold text-xs tracking-[0.2em] uppercase shadow-sm" style={{ borderColor: `${THEME.primary}40`, backgroundColor: `${THEME.primary}10`, color: THEME.primary }}>
           <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: THEME.primary }} />
-          POS Sync
+          POS Sync — Multi-Table
         </div>
-        <h2 className="text-5xl md:text-6xl font-extrabold tracking-tight" style={{ color: THEME.text }}>Table Scans</h2>
-        <p className="max-w-2xl mx-auto text-lg font-bold leading-relaxed" style={{ color: THEME.textMuted }}>Sync the service-out plate with the dish-return plate to calculate exact volumetric discrepancy and financial waste.</p>
+        <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight" style={{ color: THEME.text }}>Table Scans</h2>
+        <p className="max-w-2xl mx-auto text-base font-bold leading-relaxed" style={{ color: THEME.textMuted }}>
+          Sync the service-out plate with the dish-return plate for each table. Click on each zone to scan.
+        </p>
+        {/* Progress Counter */}
+        <div className="flex items-center gap-3 mt-2">
+          <div className="flex gap-1.5">
+            {images.map((t, i) => (
+              <div
+                key={i}
+                className="w-3 h-3 rounded-full transition-all duration-500"
+                style={{
+                  backgroundColor: t.before && t.after ? THEME.primary : t.before || t.after ? `${THEME.primary}50` : THEME.border,
+                  boxShadow: t.before && t.after ? `0 0 8px ${THEME.primary}80` : 'none'
+                }}
+              />
+            ))}
+          </div>
+          <span className="text-xs font-mono font-bold" style={{ color: THEME.textMuted }}>
+            {completedTables}/6 TABLES READY
+          </span>
+        </div>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-6">
-        <UploadZone title="Service-Out (T0)" subtitle="Capture before leaving expeditor" image={images.before} onClick={() => handleMockUpload('before')} />
-        <UploadZone title="Plate-Return (T1)" subtitle="Capture at dish pit return" image={images.after} onClick={() => handleMockUpload('after')} />
+      {/* 6 Table Rows */}
+      <div className="space-y-5">
+        {images.map((table, idx) => {
+          const isComplete = table.before && table.after;
+          return (
+            <div 
+              key={table.id} 
+              className={`rounded-2xl border backdrop-blur-md p-4 transition-all duration-500 ${isComplete ? 'border-orange-500/40' : ''}`}
+              style={{ 
+                backgroundColor: isComplete ? `${THEME.surface}` : THEME.surface, 
+                borderColor: isComplete ? undefined : THEME.border,
+                boxShadow: isComplete ? `0 0 20px rgba(234, 88, 12, 0.08)` : 'none'
+              }}
+            >
+              <div className="flex items-center gap-4 mb-3">
+                {/* Table Number Badge */}
+                <div 
+                  className="w-9 h-9 rounded-lg flex items-center justify-center font-mono font-black text-sm shrink-0 border transition-all"
+                  style={{ 
+                    backgroundColor: isComplete ? THEME.primary : `${THEME.primary}15`,
+                    color: isComplete ? '#fff' : THEME.primary,
+                    borderColor: isComplete ? THEME.primary : `${THEME.primary}40`,
+                    boxShadow: isComplete ? `0 0 12px ${THEME.primary}60` : 'none'
+                  }}
+                >
+                  T{table.id}
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-bold text-sm" style={{ color: THEME.text }}>Table {table.id}</h3>
+                  <p className="text-[11px] font-mono" style={{ color: THEME.textMuted }}>
+                    {isComplete ? '✓ Both scans synced' : table.before || table.after ? 'Partial — 1 scan remaining' : 'Awaiting scans'}
+                  </p>
+                </div>
+                {isComplete && (
+                  <div className="px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold tracking-wider" style={{ backgroundColor: `${THEME.success}20`, color: THEME.success, border: `1px solid ${THEME.success}40` }}>
+                    READY
+                  </div>
+                )}
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <UploadZone 
+                  title={`Service-Out (T0)`} 
+                  subtitle={`Table ${table.id} — Before`} 
+                  image={table.before} 
+                  onClick={() => handleMockUpload(idx, 'before')} 
+                />
+                <UploadZone 
+                  title={`Plate-Return (T1)`} 
+                  subtitle={`Table ${table.id} — After`} 
+                  image={table.after} 
+                  onClick={() => handleMockUpload(idx, 'after')} 
+                />
+              </div>
+            </div>
+          );
+        })}
       </div>
 
-      <div className="flex justify-center pt-8">
+      {/* Action Button */}
+      <div className="flex justify-center pt-6 pb-8">
         <Button onClick={onAnalyze} disabled={!isReady} className="w-full md:w-auto px-12 py-4">
-          {isReady ? 'Initialize Kitchen AI' : 'Awaiting POS Ticket Scans'} <ScanLine size={18} className={isReady ? 'animate-pulse' : ''} />
+          {isReady ? `Initialize Kitchen AI (${completedTables} Table${completedTables > 1 ? 's' : ''})` : 'Awaiting POS Ticket Scans'} <ScanLine size={18} className={isReady ? 'animate-pulse' : ''} />
         </Button>
       </div>
     </div>

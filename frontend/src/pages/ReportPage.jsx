@@ -101,7 +101,7 @@ const ReportPage = ({ onReset }) => {
             <span className="w-2.5 h-2.5 rounded-full animate-pulse" style={{ backgroundColor: THEME.success }} />
             <span className="text-sm font-mono uppercase tracking-widest font-bold" style={{ color: THEME.success }}>Analysis Complete</span>
           </div>
-          <h2 className="text-5xl font-bold tracking-tight" style={{ color: THEME.text }}>Executive Chef Dashboard</h2>
+          <h2 className="text-5xl font-bold tracking-tight" style={{ color: THEME.text }}>Overall Dashboard</h2>
         </div>
         <div className="font-mono text-sm mt-4 md:mt-0 text-right font-bold" style={{ color: THEME.textMuted }}>
           <p>TICKET_ID: #402-A</p>
