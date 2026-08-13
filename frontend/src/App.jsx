@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import { Routes, Route, useNavigate, useLocation, Navigate } from 'react-router-dom';
 import { THEME } from './theme';
 import { useMousePosition, useScrollProgress } from './hooks';
 import GlobalStyles from './components/GlobalStyles';
@@ -75,6 +75,7 @@ export default function App() {
             <ReportPage onReset={() => { setImages(Array.from({ length: 6 }, (_, i) => ({ id: i + 1, before: null, after: null }))); navigate('/analysis'); }} />
           </main>
         } />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </div>
   );
