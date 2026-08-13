@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowRight, Layers, Leaf, Mail, ExternalLink, Zap, Target, TrendingDown, Scan, Cpu, GitMerge, BarChart3, ChefHat } from 'lucide-react';
 import CodedNatureBackground from '../components/CodedNatureBackground';
 import Reveal from '../components/Reveal';
@@ -20,47 +20,32 @@ const Button = ({ children, onClick, className = '', variant = 'primary' }) => {
   );
 };
 
-const Navbar = ({ onStart }) => (
-  <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-lg border-b shadow-sm transition-all duration-300" style={{ backgroundColor: `${THEME.bg}CC`, borderColor: THEME.border }}>
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="flex justify-between items-center h-16">
+const LandingPage = ({ onStart }) => {
+  const [scrollP, setScrollP] = useState(0);
 
-        {/* Logo */}
-        <div className="flex items-center gap-2 cursor-pointer transition-transform hover:scale-105" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-          <div className="w-8 h-8 rounded-full flex items-center justify-center shadow-sm" style={{ backgroundColor: THEME.primary, color: '#fff' }}>
-            <ChefHat size={18} />
-          </div>
-          <span className="text-xl font-bold tracking-wide drop-shadow-sm" style={{ color: THEME.text }}>
-            Eco<span style={{ color: THEME.primary }}>Plate</span>
-          </span>
-        </div>
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+      setScrollP(scrollHeight > 0 ? Math.min(scrollTop / scrollHeight, 1) : 0);
+    };
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
-        {/* Desktop Links */}
-        <div className="hidden md:flex items-center gap-8 text-sm font-semibold" style={{ color: THEME.textMuted }}>
-          <a href="#pipeline" className="hover:text-orange-500 transition-colors">Kitchen Flow</a>
-          <a href="#tech" className="hover:text-orange-500 transition-colors">POS Stack</a>
-          <a href="#team" className="hover:text-orange-500 transition-colors">Team</a>
-        </div>
+  // Dynamic opacity helpers — cards become slightly more transparent as you scroll
+  // Container: CC (80%) → 88 (53%) as you scroll
+  const containerAlpha = Math.round(0xCC - scrollP * 0x44).toString(16).padStart(2, '0');
+  const containerBgAlpha = Math.round(0xBB - scrollP * 0x44).toString(16).padStart(2, '0');
+  // Cards: CC (80%) → 99 (60%) — subtle, still readable
+  const cardAlpha = Math.round(0xCC - scrollP * 0x33).toString(16).padStart(2, '0');
+  // Lighter cards: BB → 88
+  const cardLightAlpha = Math.round(0xBB - scrollP * 0x33).toString(16).padStart(2, '0');
 
-        {/* Action Buttons */}
-        <div className="flex items-center gap-3">
-          <a href="https://github.com/Eshwarnath24/EcoPlate" target="_blank" rel="noopener noreferrer" className="hidden sm:flex w-9 h-9 rounded-full border items-center justify-center transition-all hover:shadow-md" style={{ borderColor: THEME.border, backgroundColor: THEME.surface, color: THEME.textMuted }} title="GitHub">
-            <ExternalLink size={16} />
-          </a>
-          <Button onClick={onStart} className="px-5 py-2 text-sm shadow-md hover:shadow-lg">
-            Launch Terminal
-          </Button>
-        </div>
-
-      </div>
-    </div>
-  </nav>
-);
-
-const LandingPage = ({ onStart }) => (
+  return (
   <div className="pb-0 pt-20 relative min-h-screen font-sans selection:bg-orange-500/30">
     <style>{`html { scroll-behavior: smooth; }`}</style>
-    <Navbar onStart={onStart} />
     <CodedNatureBackground />
     
     {/* ===== Hero Section ===== */}
@@ -109,17 +94,18 @@ const LandingPage = ({ onStart }) => (
     </section>
 
     {/* ===== Container for Stats, Pipeline, Tech Stack, Team, Footer ===== */}
-    <div className="relative z-10 w-full rounded-t-[3rem] pt-16 mt-12 border-t"
+    <div className="relative z-10 w-full rounded-t-[3rem] pt-16 mt-12 border-t backdrop-blur-xl"
       style={{
-        background: `linear-gradient(160deg, ${THEME.surface}, ${THEME.bg})`,
+        background: `linear-gradient(160deg, ${THEME.surface}${containerAlpha}, ${THEME.bg}${containerBgAlpha})`,
         borderColor: THEME.border,
-        boxShadow: '0 -20px 60px rgba(0,0,0,0.5)'
+        boxShadow: '0 -20px 60px rgba(0,0,0,0.5)',
+        transition: 'background 0.3s ease-out'
       }}>
 
       {/* ===== Stats Row ===== */}
       <section className="relative mb-28 max-w-6xl mx-auto px-4">
         <Reveal direction="zoom-in">
-          <div className="absolute inset-0 rounded-3xl border shadow-lg mx-4" style={{ borderColor: THEME.border, backgroundColor: `${THEME.surface}80` }} />
+          <div className="absolute inset-0 rounded-3xl border shadow-lg mx-4 backdrop-blur-md" style={{ borderColor: THEME.border, backgroundColor: `${THEME.surface}${cardLightAlpha}` }} />
         </Reveal>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 py-10 px-10 relative z-10">
           <Reveal delay={0} direction="from-bottom"><AnimatedStat value={6} label="Kitchen Flow Stages" icon={<Layers size={22} />} /></Reveal>
@@ -134,13 +120,13 @@ const LandingPage = ({ onStart }) => (
       {/* ===== How It Works — Full Pipeline ===== */}
       <section id="pipeline" className="my-28 relative z-10 px-4 scroll-mt-24">
         <Reveal direction="from-bottom">
-          <div className="text-center space-y-6 mb-16 p-8 rounded-3xl flex flex-col items-center w-full backdrop-blur-md border shadow-sm" style={{ backgroundColor: THEME.surface, borderColor: THEME.border }}>
+          <div className="text-center space-y-6 mb-16 p-8 rounded-3xl flex flex-col items-center w-full backdrop-blur-md border shadow-sm" style={{ backgroundColor: `${THEME.surface}${cardAlpha}`, borderColor: THEME.border }}>
             <div className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border font-semibold text-xs tracking-[0.2em] uppercase shadow-sm" style={{ borderColor: `${THEME.primary}40`, backgroundColor: `${THEME.primary}10`, color: THEME.primary }}>
               <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: THEME.primary }} />
               Kitchen Integration
             </div>
-            <h2 className="text-5xl md:text-6xl font-extrabold tracking-tight" style={{ color: THEME.text }}>
-              The Expeditor <span className="font-serif-italic font-medium" style={{ color: THEME.accent }}>Pipeline</span>
+            <h2 className="text-6xl md:text-7xl tracking-wide -rotate-2" style={{ color: THEME.text, fontFamily: '"Caveat", cursive' }}>
+              The Expeditor <span style={{ color: THEME.accent }}>Pipeline</span>
             </h2>
             <p className="max-w-2xl mx-auto text-lg md:text-xl font-medium leading-relaxed" style={{ color: THEME.textMuted }}>
               Seamlessly integrates with your POS to calculate real-time volumetric plate waste and financial loss.
@@ -167,7 +153,7 @@ const LandingPage = ({ onStart }) => (
                 <Reveal key={step.id} delay={i * 150} direction={isLeft ? 'from-left' : 'from-right'}>
                   <div className={`flex flex-col md:flex-row items-center gap-6 ${isLeft ? '' : 'md:flex-row-reverse'}`}>
                     <div className={`flex-1 w-full ${isLeft ? 'md:text-right flex md:justify-end' : 'md:text-left flex md:justify-start'}`}>
-                      <div className="p-8 rounded-2xl border backdrop-blur-md group hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 w-full md:max-w-md text-left" style={{ backgroundColor: THEME.bg, borderColor: THEME.border }}>
+                      <div className="p-8 rounded-2xl border backdrop-blur-md group hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 w-full md:max-w-md text-left" style={{ backgroundColor: `${THEME.bg}${cardAlpha}`, borderColor: THEME.border }}>
                         <div className={`flex items-center gap-4 mb-4 ${isLeft ? 'md:flex-row-reverse' : ''}`}>
                           <div className="w-12 h-12 rounded-2xl border flex items-center justify-center group-hover:scale-110 transition-all shrink-0 shadow-md" style={{ borderColor: `${stageColors[i]}30`, backgroundColor: `${stageColors[i]}10`, color: stageColors[i] }}>
                             {icons[i]}
@@ -199,13 +185,13 @@ const LandingPage = ({ onStart }) => (
       {/* ===== Tech Stack ===== */}
       <section id="tech" className="my-28 relative z-10 px-4 scroll-mt-24">
         <Reveal direction="from-bottom">
-          <div className="text-center space-y-6 mb-14 p-8 rounded-3xl flex flex-col items-center w-full backdrop-blur-md border shadow-sm" style={{ backgroundColor: THEME.surface, borderColor: THEME.border }}>
+          <div className="text-center space-y-6 mb-14 p-8 rounded-3xl flex flex-col items-center w-full backdrop-blur-md border shadow-sm" style={{ backgroundColor: `${THEME.surface}${cardAlpha}`, borderColor: THEME.border }}>
             <div className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border font-semibold text-xs tracking-[0.2em] uppercase shadow-sm" style={{ borderColor: `${THEME.primary}40`, backgroundColor: `${THEME.primary}10`, color: THEME.primary }}>
               <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: THEME.primary }} />
               Technology
             </div>
-            <h2 className="text-5xl md:text-6xl font-extrabold tracking-tight" style={{ color: THEME.text }}>
-              Built <span className="font-serif-italic font-medium" style={{ color: THEME.accent }}>For Scale</span>
+            <h2 className="text-6xl md:text-7xl tracking-wide -rotate-2" style={{ color: THEME.text, fontFamily: '"Caveat", cursive' }}>
+              Built <span style={{ color: THEME.accent }}>For Scale</span>
             </h2>
             <p className="max-w-xl mx-auto text-lg md:text-xl font-medium leading-relaxed" style={{ color: THEME.textMuted }}>
               Enterprise-grade vision models deployed directly at the edge.
@@ -225,7 +211,7 @@ const LandingPage = ({ onStart }) => (
             { name: 'Python', desc: 'API Layer' },
           ].map((tech, i) => (
             <Reveal key={tech.name} delay={i * 50} direction="zoom-in">
-              <div className="px-6 py-7 rounded-2xl border backdrop-blur-md transition-all duration-300 cursor-default hover:shadow-lg hover:-translate-y-1 hover:border-orange-500/50 text-center group h-full" style={{ backgroundColor: THEME.surface, borderColor: THEME.border }}>
+              <div className="px-6 py-7 rounded-2xl border backdrop-blur-md transition-all duration-300 cursor-default hover:shadow-lg hover:-translate-y-1 hover:border-orange-500/50 text-center group h-full" style={{ backgroundColor: `${THEME.surface}${cardLightAlpha}`, borderColor: THEME.border }}>
                 <div className="font-bold text-lg mb-2 group-hover:text-orange-500 transition-colors" style={{ color: THEME.text, fontFamily: 'Plus Jakarta Sans' }}>{tech.name}</div>
                 <div className="text-[11px] font-bold uppercase tracking-widest" style={{ color: THEME.accent, fontFamily: 'Plus Jakarta Sans' }}>{tech.desc}</div>
               </div>
@@ -239,13 +225,13 @@ const LandingPage = ({ onStart }) => (
       {/* ===== Team ===== */}
       <section id="team" className="my-28 relative z-10 px-4 scroll-mt-24">
         <Reveal direction="from-bottom">
-          <div className="text-center space-y-6 mb-14 p-8 rounded-3xl flex flex-col items-center w-full backdrop-blur-md border shadow-sm" style={{ backgroundColor: THEME.surface, borderColor: THEME.border }}>
+          <div className="text-center space-y-6 mb-14 p-8 rounded-3xl flex flex-col items-center w-full backdrop-blur-md border shadow-sm" style={{ backgroundColor: `${THEME.surface}${cardAlpha}`, borderColor: THEME.border }}>
             <div className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border font-semibold text-xs tracking-[0.2em] uppercase shadow-sm" style={{ borderColor: `${THEME.primary}40`, backgroundColor: `${THEME.primary}10`, color: THEME.primary }}>
               <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: THEME.primary }} />
               Founders
             </div>
-            <h2 className="text-5xl md:text-6xl font-extrabold tracking-tight" style={{ color: THEME.text }}>
-              Meet the <span className="font-serif-italic font-medium" style={{ color: THEME.accent }}>Chefs</span>
+            <h2 className="text-6xl md:text-7xl tracking-wide -rotate-2" style={{ color: THEME.text, fontFamily: '"Caveat", cursive' }}>
+              Meet the <span style={{ color: THEME.accent }}>Chefs</span>
             </h2>
             <p className="max-w-xl mx-auto text-lg md:text-xl font-medium leading-relaxed" style={{ color: THEME.textMuted }}>
               Engineering solutions for sustainable and profitable kitchens.
@@ -259,7 +245,7 @@ const LandingPage = ({ onStart }) => (
             { name: 'Kalepu Lohith', role: 'Full Stack · Deep Learning', email: 'lohithkalepu@gmail.com', github: 'Lohi712' },
           ].map((member, i) => (
             <Reveal key={member.name} delay={i * 150} direction="from-bottom">
-              <div className="rounded-3xl border p-8 group hover:shadow-2xl hover:-translate-y-2 hover:-rotate-2 transition-all duration-300 text-center backdrop-blur-md h-full" style={{ backgroundColor: THEME.surface, borderColor: THEME.border }}>
+              <div className="rounded-3xl border p-8 group hover:shadow-2xl hover:-translate-y-2 hover:-rotate-2 transition-all duration-300 text-center backdrop-blur-md h-full" style={{ backgroundColor: `${THEME.surface}${cardLightAlpha}`, borderColor: THEME.border }}>
                 <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-5 transition-all group-hover:scale-110 shadow-md border-2" style={{ background: `linear-gradient(to bottom right, ${THEME.bg}, ${THEME.surface})`, borderColor: THEME.primary }}>
                   <span className="text-2xl font-bold tracking-wider" style={{ color: THEME.text }}>
                     {member.name.split(' ').map(w => w[0]).join('')}
@@ -284,7 +270,7 @@ const LandingPage = ({ onStart }) => (
       </section>
 
       {/* ===== Footer ===== */}
-      <footer className="border-t pt-14 pb-12 relative z-10 backdrop-blur-lg px-4" style={{ backgroundColor: `${THEME.bg}F0`, borderColor: THEME.border }}>
+      <footer className="border-t pt-14 pb-12 relative z-10 backdrop-blur-xl px-4" style={{ backgroundColor: `${THEME.bg}${cardLightAlpha}`, borderColor: THEME.border }}>
         <div className="max-w-4xl mx-auto text-center space-y-6">
           <div className="flex items-center justify-center gap-2">
             <span className="text-3xl drop-shadow-sm"><ChefHat size={32} style={{ color: THEME.primary }} /></span>
@@ -313,6 +299,7 @@ const LandingPage = ({ onStart }) => (
     {/* End of Container */}
 
   </div>
-);
+  );
+};
 
 export default LandingPage;

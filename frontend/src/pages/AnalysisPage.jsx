@@ -198,24 +198,72 @@ const PipelineVisualization = ({ onComplete }) => {
             <NetworkVisualizer stageId={stage.id} tick={pulseTick} />
           </div>
 
-          {/* Live Terminal Output */}
-          <div className="h-32 shrink-0 border-t p-3 font-mono text-[10px] sm:text-xs overflow-y-auto" style={{ backgroundColor: THEME.surface, borderColor: THEME.border }}>
-            <div className="flex items-center gap-2 mb-2 sticky top-0" style={{ color: THEME.textMuted, backgroundColor: THEME.surface }}>
-              <Terminal size={14} /> pos_sys.log
+          {/* POS Ticket Printer Output */}
+          <div className="h-40 shrink-0 border-t relative flex flex-col" style={{ borderColor: THEME.border }}>
+            {/* Receipt Paper */}
+            <div 
+              className="flex-1 overflow-y-auto px-5 pt-4 pb-6 font-mono text-[11px] sm:text-xs"
+              style={{ 
+                backgroundColor: '#faf6f0',
+                color: '#1a1a1a',
+                backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 19px, rgba(0,0,0,0.04) 19px, rgba(0,0,0,0.04) 20px)',
+              }}
+            >
+              {/* Receipt Header */}
+              <div className="text-center mb-3 pb-2" style={{ borderBottom: '2px dashed #ccc' }}>
+                <div className="font-bold text-sm tracking-widest">🍽️ ECOPLATE POS</div>
+                <div className="text-[10px] text-gray-500 mt-1">KITCHEN AI — LIVE RECEIPT</div>
+              </div>
+
+              {logs.map((log, i) => {
+                if (!log) return null;
+                const logStr = typeof log === 'string' ? log : JSON.stringify(log);
+                const isCost = logStr.includes('[Cost]') || logStr.includes('[SYS]');
+                const isLast = i === logs.length - 1;
+                
+                return (
+                  <div 
+                    key={i} 
+                    className={`mb-1.5 flex gap-2 ${isLast ? 'animate-[printLine_0.15s_ease-out]' : ''}`}
+                    style={{ 
+                      animationFillMode: 'forwards',
+                    }}
+                  >
+                    <span className="text-gray-400 shrink-0 select-none">{String(i + 1).padStart(3, '0')}</span>
+                    <span style={{ 
+                      color: isCost ? '#b45309' : '#374151', 
+                      fontWeight: isCost ? 'bold' : 'normal',
+                      textDecoration: isCost ? 'underline' : 'none',
+                      textDecorationStyle: isCost ? 'dotted' : undefined,
+                    }}>
+                      {logStr}
+                    </span>
+                  </div>
+                );
+              })}
+              <div ref={logsEndRef} />
             </div>
-            {logs.map((log, i) => {
-              if (!log) return null;
-              const logStr = typeof log === 'string' ? log : JSON.stringify(log);
-              const isCost = logStr.includes('[Cost]') || logStr.includes('[SYS]');
-              
-              return (
-                <div key={i} className="mb-1 flex gap-3 animate-in slide-in-from-bottom-1 fade-in">
-                  <span style={{ color: THEME.textMuted }}>[{new Date().toISOString().split('T')[1].slice(0,-2)}]</span>
-                  <span style={{ color: isCost ? THEME.accent : THEME.text, fontWeight: isCost ? 'bold' : 'normal' }}>{logStr}</span>
-                </div>
-              );
-            })}
-            <div ref={logsEndRef} />
+
+            {/* Torn/Jagged Edge at bottom */}
+            <div className="absolute bottom-0 left-0 right-0 h-4 overflow-hidden pointer-events-none" style={{ zIndex: 10 }}>
+              <svg width="100%" height="16" preserveAspectRatio="none" viewBox="0 0 200 16" className="block">
+                <path 
+                  d="M0,0 L5,12 L10,2 L15,14 L20,4 L25,11 L30,1 L35,13 L40,3 L45,12 L50,2 L55,14 L60,4 L65,11 L70,1 L75,13 L80,3 L85,12 L90,2 L95,14 L100,4 L105,11 L110,1 L115,13 L120,3 L125,12 L130,2 L135,14 L140,4 L145,11 L150,1 L155,13 L160,3 L165,12 L170,2 L175,14 L180,4 L185,11 L190,1 L195,13 L200,3 L200,16 L0,16 Z" 
+                  fill="#faf6f0" 
+                />
+              </svg>
+            </div>
+
+            {/* Printer Animation Keyframes */}
+            <style>{`
+              @keyframes printLine {
+                0% { transform: translateY(-8px); opacity: 0; }
+                40% { transform: translateX(1px) translateY(0); opacity: 0.7; }
+                60% { transform: translateX(-1px); opacity: 0.9; }
+                80% { transform: translateX(0.5px); opacity: 1; }
+                100% { transform: translateX(0) translateY(0); opacity: 1; }
+              }
+            `}</style>
           </div>
         </div>
       </div>

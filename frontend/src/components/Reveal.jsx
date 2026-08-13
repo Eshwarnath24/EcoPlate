@@ -4,6 +4,7 @@ const Reveal = ({ children, delay = 0, className = '', direction = 'from-bottom'
   const ref = useRef(null);
   const [visible, setVisible] = useState(false);
   const [animationComplete, setAnimationComplete] = useState(false);
+  const [parallaxOffset, setParallaxOffset] = useState(0);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -28,6 +29,23 @@ const Reveal = ({ children, delay = 0, className = '', direction = 'from-bottom'
     }
   }, [visible, delay]);
 
+  // Subtle parallax: elements shift slightly as you scroll past them
+  useEffect(() => {
+    if (!animationComplete) return;
+    const handleScroll = () => {
+      if (!ref.current) return;
+      const rect = ref.current.getBoundingClientRect();
+      const viewportCenter = window.innerHeight / 2;
+      const elementCenter = rect.top + rect.height / 2;
+      const offset = (elementCenter - viewportCenter) / window.innerHeight;
+      // Subtle shift: max ±8px
+      setParallaxOffset(offset * -8);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [animationComplete]);
+
   const getInitialTransform = () => {
     switch (direction) {
       case 'from-bottom': return 'translateY(50px)';
@@ -44,14 +62,22 @@ const Reveal = ({ children, delay = 0, className = '', direction = 'from-bottom'
     return 'translate(0, 0)';
   };
 
+  const getParallaxTransform = () => {
+    return `translateY(${parallaxOffset}px)`;
+  };
+
   return (
     <div
       ref={ref}
       className={className}
       style={{
         opacity: visible ? 1 : 0,
-        transform: animationComplete ? 'none' : (visible ? getFinalTransform() : getInitialTransform()),
-        transition: `opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms, transform 0.9s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms`,
+        transform: animationComplete
+          ? getParallaxTransform()
+          : (visible ? getFinalTransform() : getInitialTransform()),
+        transition: animationComplete
+          ? 'transform 0.1s linear'
+          : `opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms, transform 0.9s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms`,
         willChange: animationComplete ? 'auto' : 'opacity, transform'
       }}
     >

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { THEME } from './theme';
-import { useMousePosition } from './hooks';
+import { useMousePosition, useScrollProgress } from './hooks';
 import GlobalStyles from './components/GlobalStyles';
 import NavBar from './components/NavBar';
 import LandingPage from './pages/LandingPage';
@@ -12,10 +12,18 @@ import CodedNatureBackground from './components/CodedNatureBackground';
 export default function App() {
   const [images, setImages] = useState({ before: null, after: null });
   const mousePos = useMousePosition();
+  const scrollProgress = useScrollProgress();
   const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => { window.scrollTo({ top: 0, behavior: 'smooth' }); }, [location.pathname]);
+
+  // Dynamic cursor glow: orange grows into a wider, warmer glow as you scroll
+  const cursorRadius = 600 + scrollProgress * 400;
+  const cursorOpacity = 0.05 + scrollProgress * 0.06;
+
+  // Dot grid fades as fire intensifies
+  const dotOpacity = 0.20 - scrollProgress * 0.15;
 
   return (
     <div style={{ color: THEME.text, backgroundColor: THEME.bg }} className="min-h-screen font-sans overflow-x-hidden selection:bg-orange-500/30 relative">
@@ -23,19 +31,31 @@ export default function App() {
       
       {location.pathname !== '/' && <CodedNatureBackground />}
 
-      {/* Subtle warm cursor spotlight */}
+      {/* Subtle warm cursor spotlight — grows with scroll */}
       <div 
         className="pointer-events-none fixed inset-0 z-50 transition-opacity duration-300"
         style={{ 
-          background: `radial-gradient(600px circle at ${mousePos.x}px ${mousePos.y}px, rgba(234, 88, 12, 0.05), transparent 40%)`,
+          background: `radial-gradient(${cursorRadius}px circle at ${mousePos.x}px ${mousePos.y}px, rgba(234, 88, 12, ${cursorOpacity}), transparent 40%)`,
           opacity: mousePos.x ? 1 : 0 
         }} 
       />
 
-      {/* Subtle dot grid background for dark mode */}
-      <div className="fixed inset-0 pointer-events-none opacity-20" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0)', backgroundSize: '32px 32px' }} />
+      {/* Subtle dot grid background — fades with scroll */}
+      <div className="fixed inset-0 pointer-events-none" style={{ opacity: Math.max(dotOpacity, 0.05), backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0)', backgroundSize: '32px 32px' }} />
 
-      {location.pathname !== '/' && <NavBar onHome={() => navigate('/')} onBack={() => navigate(-1)} />}
+      {/* Scroll-reactive warm ambient glow at bottom of viewport */}
+      {scrollProgress > 0.05 && (
+        <div
+          className="fixed bottom-0 left-0 right-0 pointer-events-none z-[1]"
+          style={{
+            height: `${10 + scrollProgress * 30}%`,
+            background: `linear-gradient(to top, rgba(234, 88, 12, ${scrollProgress * 0.06}), transparent)`,
+            transition: 'height 0.4s ease-out, background 0.4s ease-out'
+          }}
+        />
+      )}
+
+      <NavBar onHome={() => navigate('/')} />
       
       <Routes>
         <Route path="/" element={

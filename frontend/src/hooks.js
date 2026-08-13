@@ -26,3 +26,20 @@ export const useCounter = (end, duration = 2000) => {
   }, [end, duration]);
   return count;
 };
+
+// --- Scroll Progress Hook (0 = top, 1 = bottom) ---
+export const useScrollProgress = () => {
+  const [progress, setProgress] = useState(0);
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const p = scrollHeight > 0 ? Math.min(scrollTop / scrollHeight, 1) : 0;
+      setProgress(p);
+    };
+    handleScroll(); // initial
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+  return progress;
+};
