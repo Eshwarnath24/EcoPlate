@@ -10,7 +10,9 @@ import ReportPage from './pages/ReportPage';
 import CodedNatureBackground from './components/CodedNatureBackground';
 
 export default function App() {
-  const [images, setImages] = useState({ before: null, after: null });
+  const [images, setImages] = useState(
+    Array.from({ length: 6 }, (_, i) => ({ id: i + 1, before: null, after: null }))
+  );
   const mousePos = useMousePosition();
   const scrollProgress = useScrollProgress();
   const location = useLocation();
@@ -70,7 +72,7 @@ export default function App() {
         } />
         <Route path="/report" element={
           <main className="max-w-7xl mx-auto px-6 py-12 pt-28 relative z-10">
-            <ReportPage onReset={() => { setImages({ before: null, after: null }); navigate('/analysis'); }} />
+            <ReportPage onReset={() => { setImages(Array.from({ length: 6 }, (_, i) => ({ id: i + 1, before: null, after: null }))); navigate('/analysis'); }} />
           </main>
         } />
       </Routes>
