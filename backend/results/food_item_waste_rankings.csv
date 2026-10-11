@@ -1,0 +1,8 @@
+Food_Item,Times_Served,Finish_Rate_pct,Avg_Waste_pct,Avg_Consumed_pct,Total_Served_Area_px,Total_Wasted_Area_px
+rice,27,44.4,47.7,52.3,3072796,2113498
+dal_sambar,26,42.3,40.4,59.6,2876798,1452783
+fryums,8,62.5,34.4,65.6,415770,121657
+curry,20,35.0,34.4,65.6,1465236,497143
+poori,22,50.0,28.3,71.7,2210297,691342
+other_food,9,55.6,18.3,81.7,310756,58973
+chutney_pickle,7,100.0,0.0,100.0,483182,0

@@ -1,0 +1,49 @@
+Plate_ID,Total_Before_Area_px,Total_After_Area_px,Overall_Waste_Percent,Overall_Consumed_Percent,Waste_Category,Num_Items_Served,Items_Served,Items_Leftover
+P1031,161415,121634,75.35,24.65,High Waste (>30%),4,"['fryums', 'curry', 'poori', 'chutney_pickle']","['dal_sambar', 'curry']"
+P1400,203524,229994,100.0,0.0,High Waste (>30%),2,"['dal_sambar', 'poori']","['rice', 'dal_sambar']"
+P1418,342595,299158,87.32,12.68,High Waste (>30%),3,"['rice', 'curry', 'poori']","['rice', 'curry', 'poori']"
+P1440,487933,60044,12.31,87.69,Moderate Waste (10-30%),3,"['dal_sambar', 'curry', 'poori']",['dal_sambar']
+P1451,382341,160156,41.89,58.11,High Waste (>30%),3,"['dal_sambar', 'curry', 'poori']",['dal_sambar']
+P1556,68931,0,0.0,100.0,Clean Plate (<10%),1,['rice'],[]
+P2226,235676,155540,66.0,34.0,High Waste (>30%),3,"['fryums', 'curry', 'poori']","['rice', 'dal_sambar', 'curry', 'poori']"
+P2402,182288,467726,100.0,0.0,High Waste (>30%),4,"['rice', 'curry', 'chutney_pickle', 'other_food']","['rice', 'dal_sambar', 'curry', 'other_food']"
+P2534,341793,12091,3.54,96.46,Clean Plate (<10%),1,['rice'],['rice']
+P2561,171444,169955,99.13,0.87,High Waste (>30%),1,['dal_sambar'],['dal_sambar']
+P2615,171549,305203,100.0,0.0,High Waste (>30%),1,['rice'],['rice']
+P2754,274436,59180,21.56,78.44,Moderate Waste (10-30%),2,"['dal_sambar', 'other_food']","['dal_sambar', 'other_food']"
+P2928,234800,119012,50.69,49.31,High Waste (>30%),2,"['rice', 'chutney_pickle']",['rice']
+P3061,128379,69437,54.09,45.91,High Waste (>30%),1,['rice'],['rice']
+P3305,181849,31832,17.5,82.5,Moderate Waste (10-30%),4,"['rice', 'dal_sambar', 'fryums', 'curry']","['dal_sambar', 'curry']"
+P3369,147424,22935,15.56,84.44,Moderate Waste (10-30%),3,"['rice', 'dal_sambar', 'fryums']",['fryums']
+P3771,170307,0,0.0,100.0,Clean Plate (<10%),2,"['rice', 'dal_sambar']",[]
+P3878,666057,233220,35.02,64.98,High Waste (>30%),3,"['dal_sambar', 'poori', 'chutney_pickle']","['dal_sambar', 'poori']"
+P4193,277268,207705,74.91,25.09,High Waste (>30%),3,"['fryums', 'curry', 'poori']","['fryums', 'curry', 'poori']"
+P4195,248543,235748,94.85,5.15,High Waste (>30%),3,"['dal_sambar', 'curry', 'poori']","['dal_sambar', 'curry', 'poori']"
+P4205,357498,0,0.0,100.0,Clean Plate (<10%),3,"['rice', 'curry', 'poori']",[]
+P4241,168648,317812,100.0,0.0,High Waste (>30%),1,['rice'],['rice']
+P4441,136604,12068,8.83,91.17,Clean Plate (<10%),2,"['dal_sambar', 'poori']",['curry']
+P4542,45719,30343,66.37,33.63,High Waste (>30%),3,"['rice', 'dal_sambar', 'chutney_pickle']",['curry']
+P4828,166753,11340,6.8,93.2,Clean Plate (<10%),3,"['dal_sambar', 'poori', 'other_food']",['poori']
+P4983,253221,288099,100.0,0.0,High Waste (>30%),3,"['rice', 'chutney_pickle', 'other_food']","['rice', 'dal_sambar', 'other_food']"
+P5028,110379,82917,75.12,24.88,High Waste (>30%),2,"['rice', 'dal_sambar']","['curry', 'poori']"
+P5378,184185,182715,99.2,0.8,High Waste (>30%),3,"['rice', 'dal_sambar', 'poori']","['rice', 'dal_sambar', 'curry', 'poori']"
+P5862,156674,14727,9.4,90.6,Clean Plate (<10%),2,"['dal_sambar', 'other_food']",['fryums']
+P5888,125978,37130,29.47,70.53,Moderate Waste (10-30%),2,"['dal_sambar', 'curry']","['rice', 'dal_sambar']"
+P5927,451517,233801,51.78,48.22,High Waste (>30%),4,"['rice', 'dal_sambar', 'curry', 'poori']","['dal_sambar', 'curry']"
+P6173,35410,227418,100.0,0.0,High Waste (>30%),1,['rice'],"['rice', 'poori']"
+P6191,141637,215410,100.0,0.0,High Waste (>30%),2,"['rice', 'dal_sambar']","['rice', 'dal_sambar']"
+P6381,248118,259336,100.0,0.0,High Waste (>30%),3,"['rice', 'curry', 'poori']","['rice', 'curry', 'poori']"
+P6392,284329,138012,48.54,51.46,High Waste (>30%),4,"['rice', 'dal_sambar', 'curry', 'poori']",['fryums']
+P6843,163447,144008,88.11,11.89,High Waste (>30%),2,"['rice', 'chutney_pickle']",['rice']
+P6865,108754,63780,58.65,41.35,High Waste (>30%),2,"['curry', 'other_food']","['curry', 'poori']"
+P7069,195818,16271,8.31,91.69,Clean Plate (<10%),2,"['dal_sambar', 'curry']",['curry']
+P7320,130348,0,0.0,100.0,Clean Plate (<10%),4,"['rice', 'dal_sambar', 'poori', 'other_food']",[]
+P8330,195522,62983,32.21,67.79,High Waste (>30%),3,"['curry', 'poori', 'other_food']","['rice', 'curry', 'other_food']"
+P8826,184402,212671,100.0,0.0,High Waste (>30%),2,"['curry', 'poori']","['dal_sambar', 'poori', 'other_food']"
+P9163,144813,107271,74.08,25.92,High Waste (>30%),2,"['dal_sambar', 'poori']","['dal_sambar', 'curry', 'poori']"
+P9182,171697,225086,100.0,0.0,High Waste (>30%),1,['rice'],['rice']
+P9557,161045,162587,100.0,0.0,High Waste (>30%),2,"['dal_sambar', 'poori']","['dal_sambar', 'poori']"
+P9598,273695,83518,30.51,69.49,High Waste (>30%),4,"['rice', 'dal_sambar', 'curry', 'other_food']",['rice']
+P9605,420436,63936,15.21,84.79,Moderate Waste (10-30%),3,"['fryums', 'curry', 'poori']","['rice', 'curry', 'other_food']"
+P9713,478741,180305,37.66,62.34,High Waste (>30%),3,"['rice', 'dal_sambar', 'fryums']","['rice', 'dal_sambar', 'fryums']"
+P9768,260895,0,0.0,100.0,Clean Plate (<10%),2,"['rice', 'fryums']",[]

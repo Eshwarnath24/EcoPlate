@@ -1,0 +1,142 @@
+Plate_ID,Food_Item,Before_Area_px,After_Area_px,Waste_Percent,Consumed_Percent,Item_Status,Overall_Plate_Waste_Percent,Plate_Status
+P1031,fryums,21913,0,0.0,100.0,Fully Finished,75.35,HIGH FOOD WASTE ALERT
+P1031,curry,40978,18262,44.57,55.43,Substantial Waste,75.35,HIGH FOOD WASTE ALERT
+P1031,poori,73054,0,0.0,100.0,Fully Finished,75.35,HIGH FOOD WASTE ALERT
+P1031,chutney_pickle,25470,0,0.0,100.0,Fully Finished,75.35,HIGH FOOD WASTE ALERT
+P1031,dal_sambar (added),0,103372,100.0,0.0,Extra Serving Leftover,75.35,HIGH FOOD WASTE ALERT
+P1400,dal_sambar,126981,110992,87.41,12.59,Substantial Waste,100.0,HIGH FOOD WASTE ALERT
+P1400,poori,76543,0,0.0,100.0,Fully Finished,100.0,HIGH FOOD WASTE ALERT
+P1400,rice (added),0,119002,100.0,0.0,Extra Serving Leftover,100.0,HIGH FOOD WASTE ALERT
+P1418,rice,110899,115305,100.0,0.0,Substantial Waste,87.32,HIGH FOOD WASTE ALERT
+P1418,curry,128421,77702,60.51,39.49,Substantial Waste,87.32,HIGH FOOD WASTE ALERT
+P1418,poori,103275,106151,100.0,0.0,Substantial Waste,87.32,HIGH FOOD WASTE ALERT
+P1440,dal_sambar,182054,60044,32.98,67.02,Substantial Waste,12.31,MODERATE: Some Leftover Waste
+P1440,curry,238597,0,0.0,100.0,Fully Finished,12.31,MODERATE: Some Leftover Waste
+P1440,poori,67282,0,0.0,100.0,Fully Finished,12.31,MODERATE: Some Leftover Waste
+P1451,dal_sambar,202922,160156,78.92,21.08,Substantial Waste,41.89,HIGH FOOD WASTE ALERT
+P1451,curry,40528,0,0.0,100.0,Fully Finished,41.89,HIGH FOOD WASTE ALERT
+P1451,poori,138891,0,0.0,100.0,Fully Finished,41.89,HIGH FOOD WASTE ALERT
+P1556,rice,68931,0,0.0,100.0,Fully Finished,0.0,EXCELLENT: Minimal Food Waste
+P2226,fryums,63124,0,0.0,100.0,Fully Finished,66.0,HIGH FOOD WASTE ALERT
+P2226,curry,69279,22793,32.9,67.1,Substantial Waste,66.0,HIGH FOOD WASTE ALERT
+P2226,poori,103273,20084,19.45,80.55,Minor Leftover,66.0,HIGH FOOD WASTE ALERT
+P2226,rice (added),0,45590,100.0,0.0,Extra Serving Leftover,66.0,HIGH FOOD WASTE ALERT
+P2226,dal_sambar (added),0,67073,100.0,0.0,Extra Serving Leftover,66.0,HIGH FOOD WASTE ALERT
+P2402,rice,127305,145617,100.0,0.0,Substantial Waste,100.0,HIGH FOOD WASTE ALERT
+P2402,curry,24246,21396,88.25,11.75,Substantial Waste,100.0,HIGH FOOD WASTE ALERT
+P2402,chutney_pickle,15742,0,0.0,100.0,Fully Finished,100.0,HIGH FOOD WASTE ALERT
+P2402,other_food,14995,9763,65.11,34.89,Substantial Waste,100.0,HIGH FOOD WASTE ALERT
+P2402,dal_sambar (added),0,290950,100.0,0.0,Extra Serving Leftover,100.0,HIGH FOOD WASTE ALERT
+P2534,rice,341793,12091,3.54,96.46,Fully Finished,3.54,EXCELLENT: Minimal Food Waste
+P2561,dal_sambar,171444,169955,99.13,0.87,Substantial Waste,99.13,HIGH FOOD WASTE ALERT
+P2615,rice,171549,305203,100.0,0.0,Substantial Waste,100.0,HIGH FOOD WASTE ALERT
+P2754,dal_sambar,172087,53542,31.11,68.89,Substantial Waste,21.56,MODERATE: Some Leftover Waste
+P2754,other_food,102349,5638,5.51,94.49,Minor Leftover,21.56,MODERATE: Some Leftover Waste
+P2928,rice,218639,119012,54.43,45.57,Substantial Waste,50.69,HIGH FOOD WASTE ALERT
+P2928,chutney_pickle,16161,0,0.0,100.0,Fully Finished,50.69,HIGH FOOD WASTE ALERT
+P3061,rice,128379,69437,54.09,45.91,Substantial Waste,54.09,HIGH FOOD WASTE ALERT
+P3305,rice,72310,0,0.0,100.0,Fully Finished,17.5,MODERATE: Some Leftover Waste
+P3305,dal_sambar,35886,7824,21.8,78.2,Minor Leftover,17.5,MODERATE: Some Leftover Waste
+P3305,fryums,11384,0,0.0,100.0,Fully Finished,17.5,MODERATE: Some Leftover Waste
+P3305,curry,62269,24008,38.56,61.44,Substantial Waste,17.5,MODERATE: Some Leftover Waste
+P3369,rice,61659,0,0.0,100.0,Fully Finished,15.56,MODERATE: Some Leftover Waste
+P3369,dal_sambar,74085,0,0.0,100.0,Fully Finished,15.56,MODERATE: Some Leftover Waste
+P3369,fryums,11680,22935,100.0,0.0,Substantial Waste,15.56,MODERATE: Some Leftover Waste
+P3771,rice,98004,0,0.0,100.0,Fully Finished,0.0,EXCELLENT: Minimal Food Waste
+P3771,dal_sambar,72303,0,0.0,100.0,Fully Finished,0.0,EXCELLENT: Minimal Food Waste
+P3878,dal_sambar,236840,116087,49.01,50.99,Substantial Waste,35.02,HIGH FOOD WASTE ALERT
+P3878,poori,202620,117133,57.81,42.19,Substantial Waste,35.02,HIGH FOOD WASTE ALERT
+P3878,chutney_pickle,226597,0,0.0,100.0,Fully Finished,35.02,HIGH FOOD WASTE ALERT
+P4193,fryums,60815,45555,74.91,25.09,Substantial Waste,74.91,HIGH FOOD WASTE ALERT
+P4193,curry,64479,27849,43.19,56.81,Substantial Waste,74.91,HIGH FOOD WASTE ALERT
+P4193,poori,151974,134301,88.37,11.63,Substantial Waste,74.91,HIGH FOOD WASTE ALERT
+P4195,dal_sambar,144924,112134,77.37,22.63,Substantial Waste,94.85,HIGH FOOD WASTE ALERT
+P4195,curry,16844,41482,100.0,0.0,Substantial Waste,94.85,HIGH FOOD WASTE ALERT
+P4195,poori,86775,82132,94.65,5.35,Substantial Waste,94.85,HIGH FOOD WASTE ALERT
+P4205,rice,115424,0,0.0,100.0,Fully Finished,0.0,EXCELLENT: Minimal Food Waste
+P4205,curry,127575,0,0.0,100.0,Fully Finished,0.0,EXCELLENT: Minimal Food Waste
+P4205,poori,114499,0,0.0,100.0,Fully Finished,0.0,EXCELLENT: Minimal Food Waste
+P4241,rice,168648,317812,100.0,0.0,Substantial Waste,100.0,HIGH FOOD WASTE ALERT
+P4441,dal_sambar,93373,0,0.0,100.0,Fully Finished,8.83,EXCELLENT: Minimal Food Waste
+P4441,poori,43231,0,0.0,100.0,Fully Finished,8.83,EXCELLENT: Minimal Food Waste
+P4441,curry (added),0,12068,100.0,0.0,Extra Serving Leftover,8.83,EXCELLENT: Minimal Food Waste
+P4542,rice,3142,0,0.0,100.0,Fully Finished,66.37,HIGH FOOD WASTE ALERT
+P4542,dal_sambar,34719,0,0.0,100.0,Fully Finished,66.37,HIGH FOOD WASTE ALERT
+P4542,chutney_pickle,7858,0,0.0,100.0,Fully Finished,66.37,HIGH FOOD WASTE ALERT
+P4542,curry (added),0,30343,100.0,0.0,Extra Serving Leftover,66.37,HIGH FOOD WASTE ALERT
+P4828,dal_sambar,116145,0,0.0,100.0,Fully Finished,6.8,EXCELLENT: Minimal Food Waste
+P4828,poori,31836,11340,35.62,64.38,Substantial Waste,6.8,EXCELLENT: Minimal Food Waste
+P4828,other_food,18772,0,0.0,100.0,Fully Finished,6.8,EXCELLENT: Minimal Food Waste
+P4983,rice,56419,75292,100.0,0.0,Substantial Waste,100.0,HIGH FOOD WASTE ALERT
+P4983,chutney_pickle,153170,0,0.0,100.0,Fully Finished,100.0,HIGH FOOD WASTE ALERT
+P4983,other_food,43632,34171,78.32,21.68,Substantial Waste,100.0,HIGH FOOD WASTE ALERT
+P4983,dal_sambar (added),0,178636,100.0,0.0,Extra Serving Leftover,100.0,HIGH FOOD WASTE ALERT
+P5028,rice,49022,0,0.0,100.0,Fully Finished,75.12,HIGH FOOD WASTE ALERT
+P5028,dal_sambar,61357,0,0.0,100.0,Fully Finished,75.12,HIGH FOOD WASTE ALERT
+P5028,curry (added),0,14109,100.0,0.0,Extra Serving Leftover,75.12,HIGH FOOD WASTE ALERT
+P5028,poori (added),0,68808,100.0,0.0,Extra Serving Leftover,75.12,HIGH FOOD WASTE ALERT
+P5378,rice,67919,63929,94.13,5.87,Substantial Waste,99.2,HIGH FOOD WASTE ALERT
+P5378,dal_sambar,33120,48638,100.0,0.0,Substantial Waste,99.2,HIGH FOOD WASTE ALERT
+P5378,poori,83146,58610,70.49,29.51,Substantial Waste,99.2,HIGH FOOD WASTE ALERT
+P5378,curry (added),0,11538,100.0,0.0,Extra Serving Leftover,99.2,HIGH FOOD WASTE ALERT
+P5862,dal_sambar,143169,0,0.0,100.0,Fully Finished,9.4,EXCELLENT: Minimal Food Waste
+P5862,other_food,13505,0,0.0,100.0,Fully Finished,9.4,EXCELLENT: Minimal Food Waste
+P5862,fryums (added),0,14727,100.0,0.0,Extra Serving Leftover,9.4,EXCELLENT: Minimal Food Waste
+P5888,dal_sambar,104007,23327,22.43,77.57,Minor Leftover,29.47,MODERATE: Some Leftover Waste
+P5888,curry,21971,0,0.0,100.0,Fully Finished,29.47,MODERATE: Some Leftover Waste
+P5888,rice (added),0,13803,100.0,0.0,Extra Serving Leftover,29.47,MODERATE: Some Leftover Waste
+P5927,rice,66624,0,0.0,100.0,Fully Finished,51.78,HIGH FOOD WASTE ALERT
+P5927,dal_sambar,117965,169982,100.0,0.0,Substantial Waste,51.78,HIGH FOOD WASTE ALERT
+P5927,curry,118605,63819,53.81,46.19,Substantial Waste,51.78,HIGH FOOD WASTE ALERT
+P5927,poori,148323,0,0.0,100.0,Fully Finished,51.78,HIGH FOOD WASTE ALERT
+P6173,rice,35410,179106,100.0,0.0,Substantial Waste,100.0,HIGH FOOD WASTE ALERT
+P6173,poori (added),0,48312,100.0,0.0,Extra Serving Leftover,100.0,HIGH FOOD WASTE ALERT
+P6191,rice,25522,78087,100.0,0.0,Substantial Waste,100.0,HIGH FOOD WASTE ALERT
+P6191,dal_sambar,116115,137323,100.0,0.0,Substantial Waste,100.0,HIGH FOOD WASTE ALERT
+P6381,rice,93472,116084,100.0,0.0,Substantial Waste,100.0,HIGH FOOD WASTE ALERT
+P6381,curry,29388,90382,100.0,0.0,Substantial Waste,100.0,HIGH FOOD WASTE ALERT
+P6381,poori,125258,52870,42.21,57.79,Substantial Waste,100.0,HIGH FOOD WASTE ALERT
+P6392,rice,74614,0,0.0,100.0,Fully Finished,48.54,HIGH FOOD WASTE ALERT
+P6392,dal_sambar,79975,0,0.0,100.0,Fully Finished,48.54,HIGH FOOD WASTE ALERT
+P6392,curry,40075,0,0.0,100.0,Fully Finished,48.54,HIGH FOOD WASTE ALERT
+P6392,poori,89665,0,0.0,100.0,Fully Finished,48.54,HIGH FOOD WASTE ALERT
+P6392,fryums (added),0,138012,100.0,0.0,Extra Serving Leftover,48.54,HIGH FOOD WASTE ALERT
+P6843,rice,125263,144008,100.0,0.0,Substantial Waste,88.11,HIGH FOOD WASTE ALERT
+P6843,chutney_pickle,38184,0,0.0,100.0,Fully Finished,88.11,HIGH FOOD WASTE ALERT
+P6865,curry,94588,29978,31.69,68.31,Substantial Waste,58.65,HIGH FOOD WASTE ALERT
+P6865,other_food,14166,0,0.0,100.0,Fully Finished,58.65,HIGH FOOD WASTE ALERT
+P6865,poori (added),0,33802,100.0,0.0,Extra Serving Leftover,58.65,HIGH FOOD WASTE ALERT
+P7069,dal_sambar,133462,0,0.0,100.0,Fully Finished,8.31,EXCELLENT: Minimal Food Waste
+P7069,curry,62356,16271,26.09,73.91,Substantial Waste,8.31,EXCELLENT: Minimal Food Waste
+P7320,rice,1227,0,0.0,100.0,Fully Finished,0.0,EXCELLENT: Minimal Food Waste
+P7320,dal_sambar,45170,0,0.0,100.0,Fully Finished,0.0,EXCELLENT: Minimal Food Waste
+P7320,poori,54014,0,0.0,100.0,Fully Finished,0.0,EXCELLENT: Minimal Food Waste
+P7320,other_food,29937,0,0.0,100.0,Fully Finished,0.0,EXCELLENT: Minimal Food Waste
+P8330,curry,45317,17593,38.82,61.18,Substantial Waste,32.21,HIGH FOOD WASTE ALERT
+P8330,poori,91286,0,0.0,100.0,Fully Finished,32.21,HIGH FOOD WASTE ALERT
+P8330,other_food,58919,9401,15.96,84.04,Minor Leftover,32.21,HIGH FOOD WASTE ALERT
+P8330,rice (added),0,35989,100.0,0.0,Extra Serving Leftover,32.21,HIGH FOOD WASTE ALERT
+P8826,curry,60998,0,0.0,100.0,Fully Finished,100.0,HIGH FOOD WASTE ALERT
+P8826,poori,123404,67809,54.95,45.05,Substantial Waste,100.0,HIGH FOOD WASTE ALERT
+P8826,dal_sambar (added),0,90028,100.0,0.0,Extra Serving Leftover,100.0,HIGH FOOD WASTE ALERT
+P8826,other_food (added),0,54834,100.0,0.0,Extra Serving Leftover,100.0,HIGH FOOD WASTE ALERT
+P9163,dal_sambar,52897,85832,100.0,0.0,Substantial Waste,74.08,HIGH FOOD WASTE ALERT
+P9163,poori,91916,12045,13.1,86.9,Minor Leftover,74.08,HIGH FOOD WASTE ALERT
+P9163,curry (added),0,9394,100.0,0.0,Extra Serving Leftover,74.08,HIGH FOOD WASTE ALERT
+P9182,rice,171697,225086,100.0,0.0,Substantial Waste,100.0,HIGH FOOD WASTE ALERT
+P9557,dal_sambar,98578,133720,100.0,0.0,Substantial Waste,100.0,HIGH FOOD WASTE ALERT
+P9557,poori,62467,28867,46.21,53.79,Substantial Waste,100.0,HIGH FOOD WASTE ALERT
+P9598,rice,134186,83518,62.24,37.76,Substantial Waste,30.51,HIGH FOOD WASTE ALERT
+P9598,dal_sambar,102321,0,0.0,100.0,Fully Finished,30.51,HIGH FOOD WASTE ALERT
+P9598,curry,22707,0,0.0,100.0,Fully Finished,30.51,HIGH FOOD WASTE ALERT
+P9598,other_food,14481,0,0.0,100.0,Fully Finished,30.51,HIGH FOOD WASTE ALERT
+P9605,fryums,116856,0,0.0,100.0,Fully Finished,15.21,MODERATE: Some Leftover Waste
+P9605,curry,156015,45608,29.23,70.77,Substantial Waste,15.21,MODERATE: Some Leftover Waste
+P9605,poori,147565,0,0.0,100.0,Fully Finished,15.21,MODERATE: Some Leftover Waste
+P9605,rice (added),0,1690,100.0,0.0,Extra Serving Leftover,15.21,MODERATE: Some Leftover Waste
+P9605,other_food (added),0,16638,100.0,0.0,Extra Serving Leftover,15.21,MODERATE: Some Leftover Waste
+P9713,rice,316696,63911,20.18,79.82,Minor Leftover,37.66,HIGH FOOD WASTE ALERT
+P9713,dal_sambar,124899,63227,50.62,49.38,Substantial Waste,37.66,HIGH FOOD WASTE ALERT
+P9713,fryums,37146,53167,100.0,0.0,Substantial Waste,37.66,HIGH FOOD WASTE ALERT
+P9768,rice,168043,0,0.0,100.0,Fully Finished,0.0,EXCELLENT: Minimal Food Waste
+P9768,fryums,92852,0,0.0,100.0,Fully Finished,0.0,EXCELLENT: Minimal Food Waste

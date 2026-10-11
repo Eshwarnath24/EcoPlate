@@ -1,0 +1,13 @@
+path: F:/4 year/nndl/Team-4/full_dataset_masks/yolo_dataset
+train: images/train
+val: images/val
+test: images/test
+names:
+  0: rice
+  1: dal_sambar
+  2: fryums
+  3: curry
+  4: poori
+  5: curd
+  6: chutney_pickle
+  7: other_food

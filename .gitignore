@@ -12,3 +12,12 @@ frontend/dist
 frontend/node_modules
 .vercel
 .DS_Store
+
+# Environment secrets
+.env
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
