@@ -44,6 +44,7 @@ app.add_middleware(
 
 # Model loading with robust paths
 WEIGHTS_CANDIDATES = [
+    os.path.join(CURRENT_DIR, "weights", "yolo11s_level1_best.pt"),
     os.path.join(CURRENT_DIR, "weights", "best.pt"),
     r"f:\4 year\nndl\Team-4\runs\segment\training_runs\yolo11n_food_seg_v2\weights\best.pt",
     r"f:\4 year\nndl\Team-4\yolo11n-seg.pt"
@@ -105,9 +106,10 @@ async def analyze_plate(
         cx_b, cy_b, r_b, pmask_b = detect_plate_bounds(img_b)
         cx_a, cy_a, r_a, pmask_a = detect_plate_bounds(img_a)
 
-        # Step 2: Segment with Option A heuristics
-        before_items, dets_b = segment_plate_contents(MODEL, img_b, pmask_b, is_after=False)
-        after_items, dets_a = segment_plate_contents(MODEL, img_a, pmask_a, is_after=True)
+        # Step 2: Segment with Level 1 (768px + Closed-World Semantic Filter)
+        before_items, dets_b = segment_plate_contents(MODEL, img_b, pmask_b, is_after=False, imgsz=768)
+        served_classes = set(before_items.keys())
+        after_items, dets_a = segment_plate_contents(MODEL, img_a, pmask_a, is_after=True, served_classes=served_classes, imgsz=768)
 
         # Step 3: Render annotated visuals
         annotated_b = render_annotated_plate(img_b, pmask_b, (cx_b, cy_b, r_b), dets_b, "BEFORE")

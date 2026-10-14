@@ -21,3 +21,8 @@ frontend/node_modules
 __pycache__/
 *.py[cod]
 *$py.class
+
+# Chat transcripts and scratch notes containing secrets
+*Chat Conversation*
+*.log
+

@@ -82,9 +82,10 @@ def run_full_test_analysis():
         cx_b, cy_b, r_b, pmask_b = detect_plate_bounds(img_b)
         cx_a, cy_a, r_a, pmask_a = detect_plate_bounds(img_a)
 
-        # Smart Segmentation with Option A
-        before_items, dets_b = segment_plate_contents(model, img_b, pmask_b, is_after=False)
-        after_items, dets_a  = segment_plate_contents(model, img_a, pmask_a, is_after=True)
+        # Level 1 Smart Segmentation (768px + Closed-World Semantic Filter)
+        before_items, dets_b = segment_plate_contents(model, img_b, pmask_b, is_after=False, imgsz=768)
+        served_classes = set(before_items.keys())
+        after_items, dets_a  = segment_plate_contents(model, img_a, pmask_a, is_after=True, served_classes=served_classes, imgsz=768)
 
         # Render Annotated Visuals
         annotated_b = render_annotated_plate(img_b, pmask_b, (cx_b, cy_b, r_b), dets_b, "BEFORE")
