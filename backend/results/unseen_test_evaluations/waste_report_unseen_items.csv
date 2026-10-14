@@ -1,0 +1,17 @@
+Plate_ID,Food_Item,Before_Area_px,After_Area_px,Waste_Percent,Consumed_Percent,Item_Status,Overall_Plate_Waste_Percent,Plate_Status
+P1400,dal_sambar,139220,114565,82.29,17.71,Substantial Waste,52.47,HIGH FOOD WASTE ALERT
+P1400,poori,79124,0,0.0,100.0,Fully Finished,52.47,HIGH FOOD WASTE ALERT
+P1418,rice,136014,116353,85.54,14.46,Substantial Waste,81.3,HIGH FOOD WASTE ALERT
+P1418,curry,125826,77120,61.29,38.71,Substantial Waste,81.3,HIGH FOOD WASTE ALERT
+P1418,poori,104382,104282,99.9,0.1,Substantial Waste,81.3,HIGH FOOD WASTE ALERT
+P1440,dal_sambar,192229,60494,31.47,68.53,Substantial Waste,18.32,MODERATE: Some Leftover Waste
+P1440,curry,55377,0,0.0,100.0,Fully Finished,18.32,MODERATE: Some Leftover Waste
+P1440,poori,82598,0,0.0,100.0,Fully Finished,18.32,MODERATE: Some Leftover Waste
+P2226,fryums,61410,0,0.0,100.0,Fully Finished,17.26,MODERATE: Some Leftover Waste
+P2226,curry,78073,22225,28.47,71.53,Substantial Waste,17.26,MODERATE: Some Leftover Waste
+P2226,poori,106083,20161,19.0,81.0,Minor Leftover,17.26,MODERATE: Some Leftover Waste
+P2402,rice,129645,457677,100.0,0.0,Substantial Waste,100.0,HIGH FOOD WASTE ALERT
+P2402,curry,25831,22421,86.8,13.2,Substantial Waste,100.0,HIGH FOOD WASTE ALERT
+P2402,other_food,15009,7041,46.91,53.09,Substantial Waste,100.0,HIGH FOOD WASTE ALERT
+P2534,rice,345453,12344,3.57,96.43,Fully Finished,2.6,EXCELLENT: Minimal Food Waste
+P2534,fryums,129974,0,0.0,100.0,Fully Finished,2.6,EXCELLENT: Minimal Food Waste

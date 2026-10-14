@@ -22,10 +22,20 @@ from ultralytics import YOLO
 
 sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 
-# Paths
-MODEL_PATH = r"f:\4 year\nndl\Team-4\runs\segment\training_runs\yolo11n_food_seg_v2\weights\best.pt"
-TEST_DIR   = r"f:\4 year\nndl\Team-4\full_dataset_masks\yolo_dataset\images\test"
-OUTPUT_DIR = r"f:\4 year\nndl\Team-4\waste_estimation_results"
+# Paths with robust local auto-detection
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+
+MODEL_PATH = os.path.join(CURRENT_DIR, "weights", "yolo11s_level1_best.pt")
+if not os.path.exists(MODEL_PATH):
+    MODEL_PATH = os.path.join(CURRENT_DIR, "weights", "best.pt")
+if not os.path.exists(MODEL_PATH):
+    MODEL_PATH = r"f:\4 year\nndl\Team-4\runs\segment\training_runs\yolo11n_food_seg_v2\weights\best.pt"
+
+TEST_DIR = os.path.join(CURRENT_DIR, "sample_test_plates")
+if not os.path.exists(TEST_DIR):
+    TEST_DIR = r"f:\4 year\nndl\Team-4\full_dataset_masks\yolo_dataset\images\test"
+
+OUTPUT_DIR = os.path.join(CURRENT_DIR, "results", "level1_waste_estimation")
 
 # Classes & Color Palette (BGR)
 CLASS_NAMES = ['rice', 'dal_sambar', 'fryums', 'curry', 'poori', 'curd', 'chutney_pickle', 'other_food']
@@ -86,17 +96,32 @@ def detect_plate_bounds(img):
     return cx, cy, r_inner, plate_mask
 
 
-def segment_plate_contents(model, img, plate_mask, is_after=False):
+def segment_plate_contents(
+    model,
+    img,
+    plate_mask,
+    is_after=False,
+    served_classes=None,
+    imgsz=768,
+    conf_thresh=None,
+    allow_extra_servings=False
+):
     """
-    Runs YOLO segmentation and applies smart ROI + post-processing filters:
-    1. Keeps only detections whose center lies inside the dining plate.
-    2. Bitwise clips predicted mask contours to plate_mask (zero rim bleeding).
-    3. Dual confidence thresholding: 0.30 for before, 0.45 for after (removes residue/smears).
+    Runs YOLO segmentation and applies Level 1 smart ROI + post-processing filters:
+    1. High-resolution inference (imgsz=768) for finer food boundary detection.
+    2. Keeps only detections whose center lies inside the dining plate ROI.
+    3. Bitwise clips predicted mask contours to plate_mask (zero rim bleeding).
+    4. Dual adaptive confidence thresholding: 0.30 for before, 0.40 for after.
+    5. Closed-World Before-to-After Semantic Filter (Option A+):
+       If is_after=True and served_classes is provided, any food detection whose class
+       was NOT served on the before plate is pruned as a post-meal smudge/reflection hallucination,
+       unless allow_extra_servings is True and conf >= 0.85 with significant area (> 5% of plate).
     """
     h, w = img.shape[:2]
-    conf_thresh = 0.45 if is_after else 0.30
+    if conf_thresh is None:
+        conf_thresh = 0.45 if is_after else 0.30
 
-    res = model(img, imgsz=640, conf=conf_thresh, verbose=False)
+    res = model(img, imgsz=imgsz, conf=conf_thresh, verbose=False)
 
     detections = []
     class_totals = {c: {'area': 0, 'mask': np.zeros((h, w), dtype=np.uint8), 'max_conf': 0.0}
@@ -105,6 +130,7 @@ def segment_plate_contents(model, img, plate_mask, is_after=False):
     if res[0].masks is not None and len(res[0].masks) > 0:
         masks_data = res[0].masks.data.cpu().numpy()
         boxes = res[0].boxes
+        plate_area = int(np.sum(plate_mask > 0))
 
         for i, (m, cls_id, conf) in enumerate(zip(masks_data, boxes.cls, boxes.conf)):
             x1, y1, x2, y2 = boxes.xyxy[i].cpu().numpy().astype(int)
@@ -123,11 +149,20 @@ def segment_plate_contents(model, img, plate_mask, is_after=False):
             area = int(np.sum(m_clipped > 0))
 
             # Filter 3: Discard tiny noise specks (< 0.2% of plate area)
-            plate_area = int(np.sum(plate_mask > 0))
             if area < (plate_area * 0.002):
                 continue
 
             cname = CLASS_NAMES[int(cls_id)]
+
+            # Filter 4 (Level 1 Closed-World Semantic Filter):
+            if is_after and served_classes is not None and cname not in served_classes:
+                if not allow_extra_servings:
+                    # Pure closed-world: food cannot appear on after plate if not served
+                    continue
+                elif float(conf) < 0.85 or area < (plate_area * 0.05):
+                    # In extra-servings mode, only accept unmistakable large additions
+                    continue
+
             class_totals[cname]['area'] += area
             class_totals[cname]['mask'] = cv2.bitwise_or(class_totals[cname]['mask'], m_clipped)
             class_totals[cname]['max_conf'] = max(class_totals[cname]['max_conf'], float(conf))
@@ -401,9 +436,10 @@ def run_pipeline():
         print(f"  Plate ROI Before: center=({cx_b},{cy_b}), r={r_b}")
         print(f"  Plate ROI After:  center=({cx_a},{cy_a}), r={r_a}")
 
-        # Step 2: Segment with Plate Constraint & Post-Processing
-        before_items, dets_b = segment_plate_contents(model, img_b, pmask_b, is_after=False)
-        after_items, dets_a  = segment_plate_contents(model, img_a, pmask_a, is_after=True)
+        # Step 2: Segment with Plate Constraint & Level 1 Closed-World Semantic Filter
+        before_items, dets_b = segment_plate_contents(model, img_b, pmask_b, is_after=False, imgsz=768)
+        served_classes = set(before_items.keys())
+        after_items, dets_a  = segment_plate_contents(model, img_a, pmask_a, is_after=True, served_classes=served_classes, imgsz=768)
 
         print(f"  Detections Before: {[d['class'] for d in dets_b]}")
         print(f"  Detections After:  {[d['class'] for d in dets_a]}")

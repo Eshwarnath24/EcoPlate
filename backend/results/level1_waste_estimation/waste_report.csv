@@ -1,0 +1,10 @@
+Plate_ID,Food_Item,Before_Area_px,After_Area_px,Waste_Percent,Consumed_Percent,Item_Status,Overall_Plate_Waste_Percent,Plate_Status
+P1031,fryums,21093,0,0.0,100.0,Fully Finished,10.56,MODERATE: Some Leftover Waste
+P1031,curry,40691,17223,42.33,57.67,Substantial Waste,10.56,MODERATE: Some Leftover Waste
+P1031,poori,75599,0,0.0,100.0,Fully Finished,10.56,MODERATE: Some Leftover Waste
+P1031,chutney_pickle,25762,0,0.0,100.0,Fully Finished,10.56,MODERATE: Some Leftover Waste
+P4828,dal_sambar,119807,0,0.0,100.0,Fully Finished,6.03,EXCELLENT: Minimal Food Waste
+P4828,poori,30375,10240,33.71,66.29,Substantial Waste,6.03,EXCELLENT: Minimal Food Waste
+P4828,other_food,19691,0,0.0,100.0,Fully Finished,6.03,EXCELLENT: Minimal Food Waste
+P9768,rice,132244,0,0.0,100.0,Fully Finished,0.0,EXCELLENT: Minimal Food Waste
+P9768,fryums,94272,0,0.0,100.0,Fully Finished,0.0,EXCELLENT: Minimal Food Waste
