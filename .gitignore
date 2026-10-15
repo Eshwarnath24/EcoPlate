@@ -26,3 +26,28 @@ __pycache__/
 *Chat Conversation*
 *.log
 
+# Large model weights (exclude from git)
+backend/weights/*.pth
+backend/weights/baseline_cnn_unet_*.pth
+*.pth
+
+# Documentations & reports (exclude docx, pdf, markdown docs, latex papers)
+*.docx
+*.pdf
+*.tex
+*.md
+!backend/README.md
+!frontend/README.md
+*backup*
+
+# Unversioned test image directories and media
+frontend/public/sample_test_plates/
+frontend/public/unseen_test_plates/
+*.jpg
+*.jpeg
+*.png
+*.webp
+*.gif
+!frontend/src/images/before_meal.png
+!frontend/src/images/after_meal.png
+
