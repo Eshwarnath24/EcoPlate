@@ -85,7 +85,8 @@ class EcoPlateSegmentationDataset(Dataset):
         image_paths: List[str],
         label_paths: Optional[List[str]] = None,
         img_size: int = 512,
-        is_training: bool = True
+        is_training: bool = True,
+        cache_in_memory: bool = True
     ):
         self.image_paths = image_paths
         self.label_paths = label_paths if label_paths is not None else [
@@ -93,6 +94,8 @@ class EcoPlateSegmentationDataset(Dataset):
         ]
         self.img_size = img_size
         self.is_training = is_training
+        self.cache_in_memory = cache_in_memory
+        self._cache = {}
 
         # Normalization constants (ImageNet standard)
         self.mean = np.array([0.485, 0.456, 0.406], dtype=np.float32)
@@ -110,26 +113,30 @@ class EcoPlateSegmentationDataset(Dataset):
         img_path = self.image_paths[idx]
         lbl_path = self.label_paths[idx]
 
-        # Read image
-        image = cv2.imread(img_path)
-        if image is None:
-            # Fallback black canvas if image missing
-            image = np.zeros((self.img_size, self.img_size, 3), dtype=np.uint8)
+        # Use in-memory cache if available
+        if self.cache_in_memory and idx in self._cache:
+            image_resized, mask_resized = self._cache[idx]
+            image_resized = image_resized.copy()
+            mask_resized = mask_resized.copy()
         else:
-            image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+            # Read image
+            image = cv2.imread(img_path)
+            if image is None:
+                image_resized = np.zeros((self.img_size, self.img_size, 3), dtype=np.uint8)
+            else:
+                image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+                image_resized = cv2.resize(image_rgb, (self.img_size, self.img_size), interpolation=cv2.INTER_LINEAR)
 
-        orig_h, orig_w = image.shape[:2]
+            # Rasterize mask directly at img_size (normalized coords allow direct rasterization)
+            if os.path.exists(lbl_path):
+                mask_resized = yolo_polygons_to_mask(lbl_path, self.img_size, self.img_size)
+            else:
+                mask_resized = np.zeros((self.img_size, self.img_size), dtype=np.uint8)
 
-        # Rasterize mask from label file if present
-        if os.path.exists(lbl_path):
-            mask = yolo_polygons_to_mask(lbl_path, orig_h, orig_w)
-        else:
-            # If label file does not exist locally, generate a neutral background mask
-            mask = np.zeros((orig_h, orig_w), dtype=np.uint8)
-
-        # Resize image and mask
-        image_resized = cv2.resize(image, (self.img_size, self.img_size), interpolation=cv2.INTER_LINEAR)
-        mask_resized  = cv2.resize(mask, (self.img_size, self.img_size), interpolation=cv2.INTER_NEAREST)
+            if self.cache_in_memory:
+                self._cache[idx] = (image_resized, mask_resized)
+                image_resized = image_resized.copy()
+                mask_resized = mask_resized.copy()
 
         # Training Augmentations
         if self.is_training:
@@ -137,6 +144,7 @@ class EcoPlateSegmentationDataset(Dataset):
             if np.random.rand() > 0.5:
                 image_resized = np.fliplr(image_resized).copy()
                 mask_resized  = np.fliplr(mask_resized).copy()
+
 
             # Slight Color Jitter
             if np.random.rand() > 0.5:
