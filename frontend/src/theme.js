@@ -12,7 +12,13 @@ export const THEME = {
 };
 
 // --- Backend API Base URL ---
-export const API_BASE = 'http://localhost:8000';
+// Reads from Vite environment variable (.env) with deployed Render fallback
+export const API_BASE = (
+  import.meta.env.VITE_API_BASE || 
+  import.meta.env.VITE_API_URL || 
+  'https://ecoplate.onrender.com'
+).replace(/\/+$/, '');
+
 
 // --- Available Model Specifications ---
 export const MODELS = {

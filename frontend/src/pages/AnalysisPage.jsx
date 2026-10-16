@@ -450,19 +450,51 @@ const AnalysisPage = ({ images, setImages, selectedModel, setSelectedModel, setA
       formData.append('before_image', beforeBlob, 'before.jpg');
       formData.append('after_image', afterBlob, 'after.jpg');
 
-      // Call live Dual-Model Backend API
-      const response = await fetch(`${API_BASE}/api/analyze-plate`, {
-        method: 'POST',
-        body: formData
-      });
+      // Call live Dual-Model Backend API (Try Render, fallback to Localhost)
+      const endpoints = [
+        `${API_BASE}/api/analyze-plate`,
+        'http://localhost:8000/api/analyze-plate'
+      ];
+      const uniqueEndpoints = [...new Set(endpoints)];
 
-      if (!response.ok) {
-        throw new Error(`Server returned ${response.status}: ${response.statusText}`);
+      let response = null;
+      let lastError = null;
+
+      for (const endpoint of uniqueEndpoints) {
+        try {
+          console.log(`[EcoPlate API] Attempting connection to: ${endpoint}`);
+          const controller = new AbortController();
+          // 8s timeout for Render in case free tier instance is sleeping
+          const timeoutId = setTimeout(() => controller.abort(), 8000);
+
+          const res = await fetch(endpoint, {
+            method: 'POST',
+            body: formData,
+            signal: controller.signal
+          });
+          clearTimeout(timeoutId);
+
+          if (res.ok) {
+            response = res;
+            console.log(`[EcoPlate API] Connected successfully via: ${endpoint}`);
+            break;
+          } else {
+            console.warn(`[EcoPlate API] ${endpoint} returned status ${res.status}`);
+          }
+        } catch (e) {
+          lastError = e;
+          console.warn(`[EcoPlate API] Could not connect to ${endpoint}:`, e.message);
+        }
+      }
+
+      if (!response) {
+        throw lastError || new Error('Both Render and Localhost backend endpoints are currently unreachable.');
       }
 
       const result = await response.json();
       console.log('[EcoPlate API Success]', result);
       setAnalysisResult(result);
+
 
     } catch (err) {
       console.warn('[Backend API Offline or Error, Using Fallback Benchmark Data]', err);
