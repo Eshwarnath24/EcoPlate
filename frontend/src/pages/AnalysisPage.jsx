@@ -450,24 +450,30 @@ const AnalysisPage = ({ images, setImages, selectedModel, setSelectedModel, setA
       formData.append('before_image', beforeBlob, 'before.jpg');
       formData.append('after_image', afterBlob, 'after.jpg');
 
-      // Call live Dual-Model Backend API (Try Render, fallback to Localhost)
-      const endpoints = [
-        `${API_BASE}/api/analyze-plate`,
-        'http://localhost:8000/api/analyze-plate'
+      // Call live Dual-Model Backend API (Try Render first, then Localhost)
+      // Render free tier cold-starts can take 30-60s, so we use a generous timeout
+      const endpointConfigs = [
+        { url: `${API_BASE}/api/analyze-plate`, timeoutMs: 120000, label: 'Render' },
+        { url: 'http://localhost:8000/api/analyze-plate', timeoutMs: 10000, label: 'Localhost' }
       ];
-      const uniqueEndpoints = [...new Set(endpoints)];
+      // Deduplicate by URL
+      const seen = new Set();
+      const uniqueConfigs = endpointConfigs.filter(c => {
+        if (seen.has(c.url)) return false;
+        seen.add(c.url);
+        return true;
+      });
 
       let response = null;
       let lastError = null;
 
-      for (const endpoint of uniqueEndpoints) {
+      for (const config of uniqueConfigs) {
         try {
-          console.log(`[EcoPlate API] Attempting connection to: ${endpoint}`);
+          console.log(`[EcoPlate API] Attempting ${config.label} connection to: ${config.url} (timeout: ${config.timeoutMs / 1000}s)`);
           const controller = new AbortController();
-          // 8s timeout for Render in case free tier instance is sleeping
-          const timeoutId = setTimeout(() => controller.abort(), 8000);
+          const timeoutId = setTimeout(() => controller.abort(), config.timeoutMs);
 
-          const res = await fetch(endpoint, {
+          const res = await fetch(config.url, {
             method: 'POST',
             body: formData,
             signal: controller.signal
@@ -476,14 +482,16 @@ const AnalysisPage = ({ images, setImages, selectedModel, setSelectedModel, setA
 
           if (res.ok) {
             response = res;
-            console.log(`[EcoPlate API] Connected successfully via: ${endpoint}`);
+            console.log(`[EcoPlate API] ✅ Connected successfully via ${config.label}: ${config.url}`);
             break;
           } else {
-            console.warn(`[EcoPlate API] ${endpoint} returned status ${res.status}`);
+            const errText = await res.text().catch(() => '');
+            console.warn(`[EcoPlate API] ${config.label} returned status ${res.status}: ${errText}`);
           }
         } catch (e) {
           lastError = e;
-          console.warn(`[EcoPlate API] Could not connect to ${endpoint}:`, e.message);
+          const reason = e.name === 'AbortError' ? `Timed out after ${config.timeoutMs / 1000}s` : e.message;
+          console.warn(`[EcoPlate API] ${config.label} failed: ${reason}`);
         }
       }
 
@@ -495,58 +503,14 @@ const AnalysisPage = ({ images, setImages, selectedModel, setSelectedModel, setA
       console.log('[EcoPlate API Success]', result);
       setAnalysisResult(result);
 
-
     } catch (err) {
-      console.warn('[Backend API Offline or Error, Using Fallback Benchmark Data]', err);
-      // Clean fallback using the preset plate's verified data
-      const activePreset = images[0].activePreset || PRESET_TEST_PLATES[0];
-      const items = [
-        { Food_Item: 'dal_sambar', Before_Area_px: 119807, After_Area_px: 0, Waste_Percent: 0.0, Consumed_Percent: 100.0, Item_Status: 'Fully Finished' },
-        { Food_Item: 'poori', Before_Area_px: 30375, After_Area_px: 10240, Waste_Percent: 33.71, Consumed_Percent: 66.29, Item_Status: 'Substantial Waste' },
-        { Food_Item: 'other_food', Before_Area_px: 19691, After_Area_px: 0, Waste_Percent: 0.0, Consumed_Percent: 100.0, Item_Status: 'Fully Finished' }
-      ];
-
-      if (selectedModel === 'compare') {
-        setAnalysisResult({
-          mode: 'compare',
-          model_name: 'Dual-Model Benchmark (YOLO vs CNN)',
-          preset_info: activePreset,
-          yolo_evaluation: {
-            model_id: 'yolo',
-            model_name: 'YOLOv11s-seg (Model A)',
-            overall_waste_percent: activePreset.benchmark_waste,
-            overall_consumed_percent: roundNum(100.0 - activePreset.benchmark_waste),
-            status: activePreset.status,
-            latency_ms: 32.0,
-            item_breakdown: items
-          },
-          cnn_evaluation: {
-            model_id: 'cnn',
-            model_name: 'Baseline CNN U-Net (Model B)',
-            overall_waste_percent: roundNum(activePreset.benchmark_waste * 1.04),
-            overall_consumed_percent: roundNum(100.0 - activePreset.benchmark_waste * 1.04),
-            status: activePreset.status,
-            latency_ms: 42.0,
-            item_breakdown: items
-          },
-          comparison_metrics: {
-            model_agreement_percent: 94.2,
-            delta_waste_percent: roundNum(Math.abs(activePreset.benchmark_waste * 0.04)),
-            faster_model: 'YOLOv11s-seg (Model A)'
-          }
-        });
-      } else {
-        setAnalysisResult({
-          model_id: selectedModel,
-          model_name: MODELS[selectedModel]?.name || 'YOLOv11s-seg (Model A)',
-          overall_waste_percent: activePreset.benchmark_waste,
-          overall_consumed_percent: roundNum(100.0 - activePreset.benchmark_waste),
-          status: activePreset.status,
-          latency_ms: selectedModel === 'cnn' ? 42.0 : 32.0,
-          preset_info: activePreset,
-          item_breakdown: items
-        });
-      }
+      console.error('[EcoPlate API Error]', err);
+      const reason = err.name === 'AbortError'
+        ? 'Backend server is still waking up (Render free tier). Please wait 30-60 seconds and try again.'
+        : `Backend unreachable: ${err.message}`;
+      alert(`⚠️ Analysis Failed\n\n${reason}\n\nMake sure the backend server is running.`);
+      setStep('upload');
+      return;
     }
   };
 

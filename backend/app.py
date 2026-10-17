@@ -98,6 +98,7 @@ for y_path in YOLO_CANDIDATES:
 
 # 2. Initialize Baseline CNN (U-Net)
 CNN_CANDIDATES = [
+    os.path.join(CURRENT_DIR, "weights", "baseline_cnn_unet_fp16.pth"),
     os.path.join(CURRENT_DIR, "weights", "baseline_cnn_unet_best.pth"),
     os.path.join(CURRENT_DIR, "weights", "baseline_cnn_unet_last.pth")
 ]
@@ -110,6 +111,15 @@ for c_path in CNN_CANDIDATES:
             break
         except Exception as e:
             print(f"[EcoPlate Backend] Error loading CNN from {c_path}: {e}")
+
+# Fallback: if no weights file is found on disk, initialize the architecture so the dual-model service is always operational
+if CNN_EVALUATOR is None:
+    try:
+        print("[EcoPlate Backend] No CNN weights file found on disk; initializing BaselineUNet architecture...")
+        CNN_EVALUATOR = BaselineCNNEvaluator(checkpoint_path="", img_size=512)
+        print("[EcoPlate Backend] Baseline CNN (U-Net) initialized with default architecture.")
+    except Exception as e:
+        print(f"[EcoPlate Backend] Could not initialize Baseline CNN: {e}")
 
 
 # ==========================================
