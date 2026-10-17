@@ -30,8 +30,6 @@ __pycache__/
 backend/weights/*.pth
 backend/weights/baseline_cnn_unet_*.pth
 *.pth
-!backend/weights/baseline_cnn_unet_fp16.pth
-
 
 # Documentations & reports (exclude docx, pdf, markdown docs, latex papers)
 *.docx
